@@ -1,17 +1,22 @@
 .circle-container {
-	width: 500px;
-	height: 500px;
-	margin: auto;
+  width: 500px;
+  height: 500px;
+  margin: auto;
 }
 
 .background {
-	fill: red;
+  fill: red;
 }
 
 .cell {
-	fill: white;
+  fill: white;
 }
 
 .on {
-	fill: black;
+  fill: black;
+}
+
+.play__btn,
+.stop__btn {
+  padding: 2rem;
 }
