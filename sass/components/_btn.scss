@@ -1,0 +1,23 @@
+.play-stop-btn {
+  font-size: 2rem;
+  padding: 5rem;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset -0.5rem -0.5rem 1rem rgba(0, 0, 0, 0.15);
+  background-color: var(--off-color);
+  transition: all 0.2s;
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+.btn--on {
+  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  background-color: var(--on-color);
+}

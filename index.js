@@ -1,12 +1,10 @@
 'use strict';
 
-// Create new audio context oscillator
+// Create new audio context
 const audioContext = new AudioContext();
 
 // Play button
-const playBtn = document.querySelector('.play__btn');
-// Stop button
-const stopBtn = document.querySelector('.stop__btn');
+const playStopBtn = document.querySelector('.play-stop-btn');
 
 // DOM circles arranged in a wheel of 16 beats
 const cells = document.querySelectorAll('.cell');
@@ -55,6 +53,24 @@ function playNote() {
   oscillator.stop(audioContext.currentTime + 0.15);
 }
 
+// Check if sequence is currently playing then stop or start sequence accordingly and update button text and styles
+function playOrStop() {
+  if (timer) {
+    // If sequence is playing, clear the current timer
+    clearTimeout(timer);
+    // Reset currentNote to start next sequence from the beginning
+    currentNote = 0;
+    // Reset timer ID to allow sequence to be restarted
+    timer = 0;
+    playStopBtn.textContent = 'Play';
+    playStopBtn.classList.toggle('btn--on');
+  } else {
+    playSequence();
+    playStopBtn.textContent = 'Stop';
+    playStopBtn.classList.toggle('btn--on');
+  }
+}
+
 function playSequence() {
   // Set timer based on current bpm to play a note if a cell is on
   timer = setTimeout(function () {
@@ -73,7 +89,7 @@ function playSequence() {
   }, BPM);
 }
 
-// Update cellsArray by checking if on class is present on current cell
+// Update cellsArray by checking if on class is present on the current cell
 function storeCellValue(cell) {
   cells[cell].classList.contains('on')
     ? (cellsArray[cell] = true)
@@ -82,9 +98,7 @@ function storeCellValue(cell) {
 
 // Play confirmation sound if cell has been changed to on
 function playConfirmationSound(cell) {
-  if (cells[cell].classList.contains('on')) {
-    playNote();
-  }
+  if (cells[cell].classList.contains('on')) playNote();
 }
 
 // Toggle a cell on or off, store the new value in cellsArray and call playConfirmationSound
@@ -99,8 +113,5 @@ for (let cell = 0; cell < cells.length; cell++) {
   cells[cell].addEventListener('click', () => toggleOnOff(cell));
 }
 
-// Add event listener to play button to call playSequence when clicked
-playBtn.addEventListener('click', playSequence);
-
-// Add event listener to stop button to clear timer when clicked
-stopBtn.addEventListener('click', () => clearTimeout(timer));
+// Add event listener to play/stop button to call playOrStop when clicked
+playStopBtn.addEventListener('click', playOrStop);

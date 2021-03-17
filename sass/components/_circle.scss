@@ -1,0 +1,19 @@
+.circle-container {
+  width: 60rem;
+  height: 60rem;
+  padding: 5rem;
+  margin: auto;
+  position: relative;
+}
+
+.background {
+  fill: var(--circle-background);
+}
+
+.cell {
+  fill: var(--off-color);
+}
+
+.on {
+  fill: var(--on-color);
+}
