@@ -18,6 +18,12 @@ html {
 
 body {
   box-sizing: border-box;
+  font-size: 1.6rem;
+  font-family: sans-serif;
+}
+
+.u-hidden {
+  visibility: hidden !important;
 }
 
 .play-stop-btn {
@@ -60,4 +66,17 @@ body {
 
 .on {
   fill: var(--on-color);
+}
+
+.control {
+  padding: 3rem;
+  font-size: 2rem;
+}
+.control__input {
+  width: 6rem;
+  padding: 1rem;
+  font-size: inherit;
+}
+.control__slider {
+  display: block;
 }/*# sourceMappingURL=main.css.map */
