@@ -5,45 +5,24 @@ const playStopBtn = document.querySelector('.play-stop-btn');
 // DOM circles arranged in a wheel of 16 beats
 const cells = document.querySelectorAll('.cell');
 
-// Tempo range slider
+// Tempo controls
 const tempoSlider = document.querySelector('#tempoSlider');
-// Tempo text input
 const tempoInput = document.querySelector('#tempoInput');
-// Tempo error message
 const tempoError = document.querySelector('#tempoErrorMsg');
 
-// Gain range slider
+// Gain controls
 const gainSlider = document.querySelector('#gainSlider');
-// Gain text input
 const gainInput = document.querySelector('#gainInput');
-// Gain error message
 const gainError = document.querySelector('#gainErrorMsg');
 
 // Array of booleans used by loop to determine whether to sound each beat when playing
-const cellsArray = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-];
+const cellsArray = new Array(16).fill(false);
 
 // Create new audio context
 const audioContext = new AudioContext();
-// Gain node
+// Create new gain node
 const gainNode = audioContext.createGain();
-// Initial gain
+// Set initial gain value
 gainNode.gain.value = 0.5;
 
 // Current note position in sequence
@@ -58,13 +37,13 @@ let BPM = parseInt(((60 / initialBpmValue) * 1000) / 4);
 // Variable used to stop and start the timer
 let timer;
 
-function playNote() {
+function playNote(pitch) {
   // Create oscillator
   const oscillator = audioContext.createOscillator();
   // Connect oscillator to gain node then audio output
   oscillator.connect(gainNode).connect(audioContext.destination);
-  // Change frequency of oscillator note to middle C from the default 440Hz
-  oscillator.detune.value = 300;
+  // Change frequency of oscillator note to pitch specified in function argument
+  oscillator.detune.value = pitch;
   // Play oscillator for 90% of the length of current note (90% to avoid overlaps)
   oscillator.start(audioContext.currentTime);
   oscillator.stop(audioContext.currentTime + (BPM / 1000) * 0.9);
@@ -91,8 +70,13 @@ function playOrStop() {
 function playSequence() {
   // Set timer based on current bpm to play a note if a cell is on
   timer = setTimeout(function () {
-    if (cellsArray[currentNote]) {
-      playNote();
+    // Play 1 octave above middle C for the first beat of the bar
+    if (cellsArray[0] && currentNote === 0) {
+      playNote(1500);
+    }
+    // Play middle C for other notes
+    else if (cellsArray[currentNote]) {
+      playNote(300);
     }
 
     // Advance sequence to the next note
@@ -115,7 +99,7 @@ function storeCellValue(cell) {
 
 // Play confirmation sound if cell has been changed to on
 function playConfirmationSound(cell) {
-  if (cells[cell].classList.contains('on')) playNote();
+  if (cells[cell].classList.contains('on')) playNote(300);
 }
 
 // Toggle a cell on or off, store the new value in cellsArray and call playConfirmationSound
