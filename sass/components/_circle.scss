@@ -19,3 +19,8 @@
 .on {
   fill: var(--on-color);
 }
+
+.current {
+  stroke: var(--current-color);
+  stroke-width: 0.5;
+}

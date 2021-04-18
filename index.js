@@ -37,6 +37,8 @@ let BPM = parseInt(((60 / initialBpmValue) * 1000) / 4);
 // Variable used to stop and start the timer
 let timer;
 
+// FUNCTIONS
+
 function playNote(pitch) {
   // Create oscillator
   const oscillator = audioContext.createOscillator();
@@ -54,6 +56,8 @@ function playOrStop() {
   if (timer) {
     // If sequence is playing, clear the current timer
     clearTimeout(timer);
+    // Remove current style from the last note playing when sequence is stopped
+    cells[(currentNote || cells.length) - 1].classList.remove('current');
     // Reset currentNote to start next sequence from the beginning
     currentNote = 0;
     // Reset timer ID to allow sequence to be restarted
@@ -78,6 +82,10 @@ function playSequence() {
     else if (cellsArray[currentNote]) {
       playNote(300);
     }
+
+    // Add current note style and remove from previous note
+    cells[currentNote].classList.add('current');
+    cells[(currentNote || cells.length) - 1].classList.remove('current');
 
     // Advance sequence to the next note
     currentNote++;
@@ -113,6 +121,8 @@ function updateTempo(newTempo) {
   // Update BPM variable used in playSequence timer and playNote note length
   BPM = parseInt(((60 / newTempo) * 1000) / 4);
 }
+
+// EVENT LISTENERS
 
 // Add event listener to each cell to toggle on or off when clicked
 for (let cell = 0; cell < cells.length; cell++) {

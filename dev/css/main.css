@@ -2,6 +2,7 @@
   --circle-background: #c6d2eb98;
   --on-color: #bacc6e;
   --off-color: #cc584a;
+  --current-color: #fff;
 }
 
 *,
@@ -70,16 +71,21 @@ body {
   fill: var(--on-color);
 }
 
+.current {
+  stroke: var(--current-color);
+  stroke-width: 0.5;
+}
+
 .control {
   padding: 3rem;
   font-size: 2rem;
   display: inline-block;
 }
+.control__container {
+  text-align: center;
+}
 .control__input {
   width: 6rem;
   padding: 1rem;
   font-size: inherit;
-}
-.control__slider {
-  display: block;
 }/*# sourceMappingURL=main.css.map */

@@ -1,18 +1,15 @@
 .control {
+  &__container {
+    text-align: center;
+  }
+
   padding: 3rem;
   font-size: 2rem;
   display: inline-block;
-
-  &__label {
-  }
 
   &__input {
     width: 6rem;
     padding: 1rem;
     font-size: inherit;
-  }
-
-  &__slider {
-    display: block;
   }
 }

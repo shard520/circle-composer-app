@@ -41,48 +41,49 @@
       </svg>
       <button class="play-stop-btn">Play</button>
     </div>
-
-    <div class="control">
-      <label for="tempoInput" class="control__label">Current Tempo:</label>
-      <input
-        id="tempoInput"
-        type="text"
-        placeholder="60"
-        class="control__input"
-      />
-      <p class="control__error-msg u-hidden" id="tempoErrorMsg">
-        Please enter a tempo between 40-240 BPM
-      </p>
-      <input
-        type="range"
-        name="tempo"
-        min="40"
-        max="240"
-        step="1"
-        id="tempoSlider"
-        class="control__slider"
-      />
-    </div>
-    <div class="control">
-      <label for="gainInput" class="control__label">Current Gain:</label>
-      <input
-        id="gainInput"
-        type="text"
-        placeholder="50"
-        class="control__input"
-      />
-      <p class="control__error-msg u-hidden" id="gainErrorMsg">
-        Please enter a gain between 0 and 100
-      </p>
-      <input
-        type="range"
-        name="gain"
-        min="0"
-        max="100"
-        step="1"
-        id="gainSlider"
-        class="control__slider"
-      />
+    <div class="control__container">
+      <div class="control">
+        <label for="tempoInput" class="control__label">Current Tempo:</label>
+        <input
+          id="tempoInput"
+          type="text"
+          placeholder="60"
+          class="control__input"
+        />
+        <p class="control__error-msg u-hidden" id="tempoErrorMsg">
+          Please enter a tempo between 40-240 BPM
+        </p>
+        <input
+          type="range"
+          name="tempo"
+          min="40"
+          max="240"
+          step="1"
+          id="tempoSlider"
+          class="control__slider"
+        />
+      </div>
+      <div class="control">
+        <label for="gainInput" class="control__label">Current Gain:</label>
+        <input
+          id="gainInput"
+          type="text"
+          placeholder="50"
+          class="control__input"
+        />
+        <p class="control__error-msg u-hidden" id="gainErrorMsg">
+          Please enter a gain between 0 and 100
+        </p>
+        <input
+          type="range"
+          name="gain"
+          min="0"
+          max="100"
+          step="1"
+          id="gainSlider"
+          class="control__slider"
+        />
+      </div>
     </div>
     <script src="./index.js"></script>
   </body>
