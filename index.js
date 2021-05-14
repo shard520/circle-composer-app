@@ -14,22 +14,38 @@ const tempoInput = document.querySelector('#tempoInput');
 const tempoError = document.querySelector('#tempoErrorMsg');
 
 // Pulse gain controls
-const gainSlider = document.querySelector('#gainSlider');
-const gainInput = document.querySelector('#gainInput');
-const gainError = document.querySelector('#gainErrorMsg');
+const pulseGainSlider = document.querySelector('#pulseGainSlider');
+const pulseGainInput = document.querySelector('#pulseGainInput');
+const pulseGainError = document.querySelector('#pulseGainErrorMsg');
+
+// Pattern gain controls
+const patternGainSlider = document.querySelector('#patternGainSlider');
+const patternGainInput = document.querySelector('#patternGainInput');
+const patternGainError = document.querySelector('#patternGainErrorMsg');
 
 // Wood Block audio element
 const woodBlock = document.querySelector('#woodBlock');
+woodBlock.load();
 
 // Array of booleans used by loop to determine whether to sound each beat when playing
 const cellsArray = new Array(16).fill(false);
 
 // Create new audio context
 const audioContext = new AudioContext();
-// Create new gain node
-const gainNode = audioContext.createGain();
-// Set initial gain value
-gainNode.gain.value = 0.5;
+
+// Pass wood block element into the audio context
+const woodBlockNode = audioContext.createMediaElementSource(woodBlock);
+
+// Create new gain node for pulse
+const pulseGainNode = audioContext.createGain();
+// Set initial pulse gain value
+pulseGainNode.gain.value = 0.5;
+// Create new gain node for pattern
+const patternGainNode = audioContext.createGain();
+// Set initial pattern gain value
+patternGainNode.gain.value = 0.5;
+// Connect woodBlock to gain node then audio output
+woodBlockNode.connect(patternGainNode).connect(audioContext.destination);
 
 // Current note position in sequence
 let currentNote = 0;
@@ -45,11 +61,11 @@ let timer;
 
 // FUNCTIONS
 
-function playNote(pitch) {
+function playPulseNote(pitch) {
   // Create oscillator
   const oscillator = audioContext.createOscillator();
   // Connect oscillator to gain node then audio output
-  oscillator.connect(gainNode).connect(audioContext.destination);
+  oscillator.connect(pulseGainNode).connect(audioContext.destination);
   // Change frequency of oscillator note to pitch specified in function argument
   oscillator.detune.value = pitch;
   // Play oscillator for 90% of the length of current note (90% to avoid overlaps)
@@ -82,11 +98,11 @@ function playSequence() {
   timer = setTimeout(function () {
     // Play 1 octave above middle C for the first pulse beat of the bar
     if (currentNote === 0) {
-      playNote(1500);
+      playPulseNote(1500);
     }
     // Play middle C for other pulse notes
     else if (currentNote !== 0 && currentNote % 4 === 0) {
-      playNote(300);
+      playPulseNote(300);
     }
 
     // Play wood block sound if current cell is on
@@ -134,7 +150,7 @@ function toggleOnOff(cell) {
 }
 
 function updateTempo(newTempo) {
-  // Update BPM variable used in playSequence timer and playNote note length
+  // Update BPM variable used in playSequence timer and playPulseNote note length
   BPM = parseInt(((60 / newTempo) * 1000) / 4);
 }
 
@@ -204,20 +220,38 @@ tempoInput.oninput = function (event) {
   } else tempoError.classList.remove('u-hidden');
 };
 
-// Detect gain change and update gainNode on oscillator
-gainSlider.oninput = function (event) {
+// Detect gain change and update pulseGainNode on oscillator
+pulseGainSlider.oninput = function (event) {
   const input = event.target.value / 100;
-  gainNode.gain.value = input;
-  gainInput.value = Math.round(input * 100);
+  pulseGainNode.gain.value = input;
+  pulseGainInput.value = Math.round(input * 100);
 };
 
 // Detect gain change on gain text input, check if it's a valid gain and either display error message or update current gain
-gainInput.oninput = function (event) {
+pulseGainInput.oninput = function (event) {
   const input = Number(event.target.value.trim()) / 100;
 
   if (input >= 0 && input <= 1) {
-    gainError.classList.add('u-hidden');
-    gainNode.gain.value = input;
-    gainSlider.value = input;
-  } else gainError.classList.remove('u-hidden');
+    pulseGainError.classList.add('u-hidden');
+    pulseGainNode.gain.value = input;
+    pulseGainSlider.value = input;
+  } else pulseGainError.classList.remove('u-hidden');
+};
+
+// Detect gain change and update patternGainNode on oscillator
+patternGainSlider.oninput = function (event) {
+  const input = event.target.value / 100;
+  patternGainNode.gain.value = input;
+  patternGainInput.value = Math.round(input * 100);
+};
+
+// Detect gain change on gain text input, check if it's a valid gain and either display error message or update current gain
+patternGainInput.oninput = function (event) {
+  const input = Number(event.target.value.trim()) / 100;
+
+  if (input >= 0 && input <= 1) {
+    patternGainError.classList.add('u-hidden');
+    patternGainNode.gain.value = input;
+    patternGainSlider.value = input;
+  } else patternGainError.classList.remove('u-hidden');
 };

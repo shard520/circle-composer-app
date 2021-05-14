@@ -62,7 +62,6 @@ body {
 }
 .btn--shift:active {
   transform: translateY(-0.1rem);
-  background-color: var(--on-color);
 }
 .btn--minus {
   left: 0;
@@ -114,4 +113,7 @@ body {
   width: 6rem;
   padding: 1rem;
   font-size: inherit;
+}
+.control__slider {
+  cursor: pointer;
 }/*# sourceMappingURL=main.css.map */

@@ -45,6 +45,52 @@
     </div>
     <div class="control__container">
       <div class="control">
+        <label for="pulseGainInput" class="control__label">Count Volume:</label>
+        <input
+          id="pulseGainInput"
+          type="text"
+          placeholder="50"
+          class="control__input"
+        />
+        <p class="control__error-msg u-hidden" id="pulseGainErrorMsg">
+          Please enter a value between 0 and 100
+        </p>
+        <input
+          type="range"
+          name="gain"
+          min="0"
+          max="100"
+          step="1"
+          id="pulseGainSlider"
+          class="control__slider"
+        />
+      </div>
+
+      <div class="control">
+        <label for="patternGainInput" class="control__label"
+          >Pattern Volume:</label
+        >
+        <input
+          id="patternGainInput"
+          type="text"
+          placeholder="50"
+          class="control__input"
+        />
+        <p class="control__error-msg u-hidden" id="patternGainErrorMsg">
+          Please enter a value between 0 and 100
+        </p>
+        <input
+          type="range"
+          name="gain"
+          min="0"
+          max="100"
+          step="1"
+          id="patternGainSlider"
+          class="control__slider"
+        />
+      </div>
+
+      <div class="control">
         <label for="tempoInput" class="control__label">Current Tempo:</label>
         <input
           id="tempoInput"
@@ -65,28 +111,8 @@
           class="control__slider"
         />
       </div>
-      <div class="control">
-        <label for="gainInput" class="control__label">Current Gain:</label>
-        <input
-          id="gainInput"
-          type="text"
-          placeholder="50"
-          class="control__input"
-        />
-        <p class="control__error-msg u-hidden" id="gainErrorMsg">
-          Please enter a gain between 0 and 100
-        </p>
-        <input
-          type="range"
-          name="gain"
-          min="0"
-          max="100"
-          step="1"
-          id="gainSlider"
-          class="control__slider"
-        />
-      </div>
     </div>
+
     <audio src="./audio/wood_block.mp3" id="woodBlock"></audio>
     <script src="./index.js"></script>
   </body>
