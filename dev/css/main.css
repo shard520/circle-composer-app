@@ -27,11 +27,14 @@ body {
   visibility: hidden !important;
 }
 
-.play-stop-btn {
-  font-size: 2rem;
-  padding: 10.5%;
+.btn {
   border-radius: 50%;
   border: 1px solid #fff;
+  cursor: pointer;
+}
+.btn--play-stop {
+  font-size: 2rem;
+  padding: 10.5%;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -40,13 +43,35 @@ body {
   background-color: var(--off-color);
   transition: all 0.2s;
 }
-.play-stop-btn:focus, .play-stop-btn:active {
-  outline: none;
-}
-
 .btn--on {
   box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
   background-color: var(--on-color);
+}
+.btn--shift {
+  font-size: 3rem;
+  width: 6rem;
+  height: 6rem;
+  position: absolute;
+  will-change: transform, background-color;
+  transition: transform 0.2s, background-color 0.2s;
+  background-color: var(--circle-background);
+}
+.btn--shift:hover {
+  transform: translateY(-0.3rem);
+  background-color: rgba(122, 150, 209, 0.5960784314);
+}
+.btn--shift:active {
+  transform: translateY(-0.1rem);
+  background-color: var(--on-color);
+}
+.btn--minus {
+  left: 0;
+}
+.btn--plus {
+  right: 0;
+}
+.btn:focus, .btn:active {
+  outline: none;
 }
 
 .circle-container {
@@ -65,6 +90,7 @@ body {
 
 .cell {
   fill: var(--off-color);
+  cursor: pointer;
 }
 
 .on {

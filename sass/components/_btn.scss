@@ -1,23 +1,55 @@
-.play-stop-btn {
-  font-size: 2rem;
-  padding: 10.5%;
+.btn {
   border-radius: 50%;
   border: 1px solid #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: inset -0.5rem -0.5rem 1rem rgba(0, 0, 0, 0.15);
-  background-color: var(--off-color);
-  transition: all 0.2s;
+  cursor: pointer;
+
+  &--play-stop {
+    font-size: 2rem;
+    padding: 10.5%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset -0.5rem -0.5rem 1rem rgba(0, 0, 0, 0.15);
+    background-color: var(--off-color);
+    transition: all 0.2s;
+  }
+
+  &--on {
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    background-color: var(--on-color);
+  }
+
+  &--shift {
+    font-size: 3rem;
+    width: 6rem;
+    height: 6rem;
+    position: absolute;
+    will-change: transform, background-color;
+    transition: transform 0.2s, background-color 0.2s;
+    background-color: var(--circle-background);
+
+    &:hover {
+      transform: translateY(-0.3rem);
+      background-color: darken(#c6d2eb98, 20%);
+    }
+
+    &:active {
+      transform: translateY(-0.1rem);
+      background-color: var(--on-color);
+    }
+  }
+
+  &--minus {
+    left: 0;
+  }
+
+  &--plus {
+    right: 0;
+  }
 
   &:focus,
   &:active {
     outline: none;
   }
-}
-
-.btn--on {
-  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  background-color: var(--on-color);
 }

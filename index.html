@@ -9,6 +9,7 @@
   </head>
   <body>
     <div class="circle-container">
+      <button class="btn btn--shift btn--minus">-</button>
       <svg
         class="circle-svg"
         version="1.1"
@@ -39,7 +40,8 @@
         <circle class="cell" id="cell14" cx="11.5" cy="11.5" r="2.65" />
         <circle class="cell" id="cell15" cx="18.4" cy="6.88" r="2.65" />
       </svg>
-      <button class="play-stop-btn">Play</button>
+      <button class="btn btn--play-stop">Play</button>
+      <button class="btn btn--shift btn--plus">+</button>
     </div>
     <div class="control__container">
       <div class="control">
@@ -85,6 +87,7 @@
         />
       </div>
     </div>
+    <audio src="./audio/wood_block.mp3" id="woodBlock"></audio>
     <script src="./index.js"></script>
   </body>
 </html>

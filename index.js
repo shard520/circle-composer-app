@@ -1,7 +1,10 @@
 'use strict';
 
 // Play button
-const playStopBtn = document.querySelector('.play-stop-btn');
+const playStopBtn = document.querySelector('.btn--play-stop');
+// Plus and Minus buttons
+const plusBtn = document.querySelector('.btn--plus');
+const minusBtn = document.querySelector('.btn--minus');
 // DOM circles arranged in a wheel of 16 beats
 const cells = document.querySelectorAll('.cell');
 
@@ -10,10 +13,13 @@ const tempoSlider = document.querySelector('#tempoSlider');
 const tempoInput = document.querySelector('#tempoInput');
 const tempoError = document.querySelector('#tempoErrorMsg');
 
-// Gain controls
+// Pulse gain controls
 const gainSlider = document.querySelector('#gainSlider');
 const gainInput = document.querySelector('#gainInput');
 const gainError = document.querySelector('#gainErrorMsg');
+
+// Wood Block audio element
+const woodBlock = document.querySelector('#woodBlock');
 
 // Array of booleans used by loop to determine whether to sound each beat when playing
 const cellsArray = new Array(16).fill(false);
@@ -74,13 +80,20 @@ function playOrStop() {
 function playSequence() {
   // Set timer based on current bpm to play a note if a cell is on
   timer = setTimeout(function () {
-    // Play 1 octave above middle C for the first beat of the bar
-    if (cellsArray[0] && currentNote === 0) {
+    // Play 1 octave above middle C for the first pulse beat of the bar
+    if (currentNote === 0) {
       playNote(1500);
     }
-    // Play middle C for other notes
-    else if (cellsArray[currentNote]) {
+    // Play middle C for other pulse notes
+    else if (currentNote !== 0 && currentNote % 4 === 0) {
       playNote(300);
+    }
+
+    // Play wood block sound if current cell is on
+    if (cellsArray[currentNote]) {
+      woodBlock.pause();
+      woodBlock.currentTime = 0;
+      woodBlock.play();
     }
 
     // Add current note style and remove from previous note
@@ -105,9 +118,12 @@ function storeCellValue(cell) {
     : (cellsArray[cell] = false);
 }
 
-// Play confirmation sound if cell has been changed to on
+// When sequence is stopped, play confirmation sound if cell has been changed to on
 function playConfirmationSound(cell) {
-  if (cells[cell].classList.contains('on')) playNote(300);
+  if (!timer && cells[cell].classList.contains('on')) {
+    woodBlock.load();
+    woodBlock.play();
+  }
 }
 
 // Toggle a cell on or off, store the new value in cellsArray and call playConfirmationSound
@@ -122,6 +138,22 @@ function updateTempo(newTempo) {
   BPM = parseInt(((60 / newTempo) * 1000) / 4);
 }
 
+// Update cellsArray with new values
+function updateArray(oldArr, newArr) {
+  cellsArray.forEach((_, index) => {
+    oldArr[index] = newArr[index];
+  });
+  updateDisplay();
+}
+
+// Update on or off display of cells
+function updateDisplay() {
+  cells.forEach((_, i) => {
+    if (cellsArray[i]) cells[i].classList.add('on');
+    else cells[i].classList.remove('on');
+  });
+}
+
 // EVENT LISTENERS
 
 // Add event listener to each cell to toggle on or off when clicked
@@ -131,6 +163,28 @@ for (let cell = 0; cell < cells.length; cell++) {
 
 // Add event listener to play/stop button to call playOrStop when clicked
 playStopBtn.addEventListener('click', playOrStop);
+
+// Add event listener to shift pattern forward
+plusBtn.addEventListener('click', () => {
+  // Create new array with values from the first to the last but one values from cellsArray
+  const tempCellsArr = cellsArray.slice(0, cellsArray.length - 1);
+  // Add the last value of cellsArray to the start of the new array
+  tempCellsArr.unshift(cellsArray[cellsArray.length - 1]);
+
+  // Update values of cellsArray
+  updateArray(cellsArray, tempCellsArr);
+});
+
+// Add event listener to shift pattern backward
+minusBtn.addEventListener('click', () => {
+  // Create new array with values from the second to the last values from cellsArray
+  const tempCellsArr = cellsArray.slice(1);
+  // Add the first value of cellsArray to the end of the new array
+  tempCellsArr.push(cellsArray[0]);
+
+  // Update values of cellsArray
+  updateArray(cellsArray, tempCellsArr);
+});
 
 // Detect tempo change on range slider and update current tempo
 tempoSlider.oninput = function (event) {
