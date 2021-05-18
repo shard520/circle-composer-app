@@ -8,20 +8,8 @@ const minusBtn = document.querySelector('.btn--minus');
 // DOM circles arranged in a wheel of 16 beats
 const cells = document.querySelectorAll('.cell');
 
-// Tempo controls
-const tempoSlider = document.querySelector('#tempoSlider');
-const tempoInput = document.querySelector('#tempoInput');
-const tempoError = document.querySelector('#tempoErrorMsg');
-
-// Pulse gain controls
-const pulseGainSlider = document.querySelector('#pulseGainSlider');
-const pulseGainInput = document.querySelector('#pulseGainInput');
-const pulseGainError = document.querySelector('#pulseGainErrorMsg');
-
-// Pattern gain controls
-const patternGainSlider = document.querySelector('#patternGainSlider');
-const patternGainInput = document.querySelector('#patternGainInput');
-const patternGainError = document.querySelector('#patternGainErrorMsg');
+// Controls container
+const controls = document.querySelector('.control__container');
 
 // Wood Block audio element
 const woodBlock = document.querySelector('#woodBlock');
@@ -36,16 +24,65 @@ const audioContext = new AudioContext();
 // Pass wood block element into the audio context
 const woodBlockNode = audioContext.createMediaElementSource(woodBlock);
 
-// Create new gain node for pulse
-const pulseGainNode = audioContext.createGain();
-// Set initial pulse gain value
-pulseGainNode.gain.value = 0.5;
 // Create new gain node for pattern
 const patternGainNode = audioContext.createGain();
 // Set initial pattern gain value
 patternGainNode.gain.value = 0.5;
 // Connect woodBlock to gain node then audio output
 woodBlockNode.connect(patternGainNode).connect(audioContext.destination);
+
+// Create new gain node for pulse
+const pulseGainNode = audioContext.createGain();
+// Set initial pulse gain value
+pulseGainNode.gain.value = 0.5;
+
+// Tempo and Gain controls
+class Control {
+  constructor(slider, input, error, min, max, type) {
+    this.slider = slider;
+    this.input = input;
+    this.error = error;
+    this.min = min;
+    this.max = max;
+    this.type = type;
+  }
+}
+
+class GainControl extends Control {
+  constructor(slider, input, error, min, max, type, gainNode) {
+    super(slider, input, error, min, max, type);
+    this.gainNode = gainNode;
+  }
+}
+
+const tempoControl = new Control(
+  document.querySelector('#tempoSlider'),
+  document.querySelector('#tempoInput'),
+  document.querySelector('#tempoErrorMsg'),
+  60,
+  240,
+  'tempo'
+);
+
+const pulseGainControl = new GainControl(
+  document.querySelector('#pulseGainSlider'),
+  document.querySelector('#pulseGainInput'),
+  document.querySelector('#pulseGainErrorMsg'),
+  0,
+  100,
+  'gain',
+  pulseGainNode
+);
+
+const patternGainControl = new GainControl(
+  document.querySelector('#patternGainSlider'),
+  document.querySelector('#patternGainInput'),
+  document.querySelector('#patternGainErrorMsg'),
+  0,
+  100,
+  'gain',
+  patternGainNode
+);
 
 // Current note position in sequence
 let currentNote = 0;
@@ -60,17 +97,16 @@ let BPM = parseInt(((60 / initialBpmValue) * 1000) / 4);
 let timer;
 
 // FUNCTIONS
-
 function playPulseNote(pitch) {
   // Create oscillator
   const oscillator = audioContext.createOscillator();
-  // Connect oscillator to gain node then audio output
+  // Connect oscillator to pulse gain node then audio output
   oscillator.connect(pulseGainNode).connect(audioContext.destination);
   // Change frequency of oscillator note to pitch specified in function argument
   oscillator.detune.value = pitch;
-  // Play oscillator for 90% of the length of current note (90% to avoid overlaps)
+  // Play oscillator for the length of 1/16th at current tempo
   oscillator.start(audioContext.currentTime);
-  oscillator.stop(audioContext.currentTime + (BPM / 1000) * 0.9);
+  oscillator.stop(audioContext.currentTime + BPM / 1000);
 }
 
 // Check if sequence is currently playing then stop or start sequence accordingly and update button text and styles
@@ -170,17 +206,41 @@ function updateDisplay() {
   });
 }
 
-// EVENT LISTENERS
+// Update gain or tempo from slider input and set as the value of text input
+function controlSliderChange(input, control) {
+  control.type === 'tempo'
+    ? updateTempo(input)
+    : (control.gainNode.gain.value = input / 100);
+  control.input.value = Math.round(input);
+}
 
+// Update gain or tempo from text input
+function controlTextInputChange(input, control) {
+  input = Number(input);
+
+  // check input is within valid range,
+  // update control and slider value if so, show error message if not
+  if (input >= control.min && input <= control.max) {
+    control.type === 'tempo'
+      ? updateTempo(input)
+      : (control.gainNode.gain.value = input / 100);
+
+    control.slider.value = input;
+  } else {
+    control.error.textContent = `Please enter a value between ${control.min} and ${control.max}`;
+    control.error.classList.remove('u-hidden');
+  }
+}
+
+// EVENT LISTENERS
 // Add event listener to each cell to toggle on or off when clicked
 for (let cell = 0; cell < cells.length; cell++) {
   cells[cell].addEventListener('click', () => toggleOnOff(cell));
 }
 
-// Add event listener to play/stop button to call playOrStop when clicked
 playStopBtn.addEventListener('click', playOrStop);
 
-// Add event listener to shift pattern forward
+// Shift pattern forward
 plusBtn.addEventListener('click', () => {
   // Create new array with values from the first to the last but one values from cellsArray
   const tempCellsArr = cellsArray.slice(0, cellsArray.length - 1);
@@ -191,7 +251,7 @@ plusBtn.addEventListener('click', () => {
   updateArray(cellsArray, tempCellsArr);
 });
 
-// Add event listener to shift pattern backward
+// Shift pattern backward
 minusBtn.addEventListener('click', () => {
   // Create new array with values from the second to the last values from cellsArray
   const tempCellsArr = cellsArray.slice(1);
@@ -202,56 +262,22 @@ minusBtn.addEventListener('click', () => {
   updateArray(cellsArray, tempCellsArr);
 });
 
-// Detect tempo change on range slider and update current tempo
-tempoSlider.oninput = function (event) {
-  const input = event.target.value;
-  updateTempo(input);
-  tempoInput.value = input;
-};
+// Change gain or tempo controls
+controls.oninput = function (e) {
+  const input = e.target.value.trim();
+  const control = e.target.dataset.control;
+  const type = e.target.type;
+  let controlObj;
 
-// Detect tempo change on tempo text input, check if it's a valid tempo and either display error message or update current tempo
-tempoInput.oninput = function (event) {
-  const input = Number(event.target.value.trim());
+  if (control === 'tempo') controlObj = tempoControl;
+  else if (control === 'pulse') controlObj = pulseGainControl;
+  else if (control === 'pattern') controlObj = patternGainControl;
 
-  if (input >= 40 && input <= 240) {
-    tempoError.classList.add('u-hidden');
-    updateTempo(input);
-    tempoSlider.value = input;
-  } else tempoError.classList.remove('u-hidden');
-};
+  controlObj.error.classList.add('u-hidden');
 
-// Detect gain change and update pulseGainNode on oscillator
-pulseGainSlider.oninput = function (event) {
-  const input = event.target.value / 100;
-  pulseGainNode.gain.value = input;
-  pulseGainInput.value = Math.round(input * 100);
-};
-
-// Detect gain change on gain text input, check if it's a valid gain and either display error message or update current gain
-pulseGainInput.oninput = function (event) {
-  const input = Number(event.target.value.trim()) / 100;
-
-  if (input >= 0 && input <= 1) {
-    pulseGainError.classList.add('u-hidden');
-    pulseGainNode.gain.value = input;
-    pulseGainSlider.value = input;
-  } else pulseGainError.classList.remove('u-hidden');
-};
-
-// Detect gain change and update patternGainNode on oscillator
-patternGainSlider.oninput = function (event) {
-  const input = event.target.value / 100;
-  patternGainNode.gain.value = input;
-  patternGainInput.value = Math.round(input * 100);
-};
-
-// Detect gain change on gain text input, check if it's a valid gain and either display error message or update current gain
-patternGainInput.oninput = function (event) {
-  const input = Number(event.target.value.trim()) / 100;
-
-  if (input >= 0 && input <= 1) {
-    patternGainError.classList.add('u-hidden');
-    patternGainNode.gain.value = input;
-    patternGainSlider.value = input;
-  } else patternGainError.classList.remove('u-hidden');
+  if (type === 'range') {
+    controlSliderChange(input, controlObj);
+  } else if (type === 'text') {
+    controlTextInputChange(input, controlObj);
+  }
 };

@@ -51,6 +51,7 @@
           type="text"
           placeholder="50"
           class="control__input"
+          data-control="pulse"
         />
         <p class="control__error-msg u-hidden" id="pulseGainErrorMsg">
           Please enter a value between 0 and 100
@@ -63,6 +64,7 @@
           step="1"
           id="pulseGainSlider"
           class="control__slider"
+          data-control="pulse"
         />
       </div>
 
@@ -75,6 +77,7 @@
           type="text"
           placeholder="50"
           class="control__input"
+          data-control="pattern"
         />
         <p class="control__error-msg u-hidden" id="patternGainErrorMsg">
           Please enter a value between 0 and 100
@@ -87,6 +90,7 @@
           step="1"
           id="patternGainSlider"
           class="control__slider"
+          data-control="pattern"
         />
       </div>
 
@@ -97,9 +101,10 @@
           type="text"
           placeholder="60"
           class="control__input"
+          data-control="tempo"
         />
         <p class="control__error-msg u-hidden" id="tempoErrorMsg">
-          Please enter a tempo between 40-240 BPM
+          Please enter a value between 40-240
         </p>
         <input
           type="range"
@@ -109,6 +114,7 @@
           step="1"
           id="tempoSlider"
           class="control__slider"
+          data-control="tempo"
         />
       </div>
     </div>

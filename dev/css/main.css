@@ -102,7 +102,7 @@ body {
 }
 
 .control {
-  padding: 3rem;
+  padding: 1.5rem 3rem;
   font-size: 2rem;
   display: inline-block;
 }
@@ -113,6 +113,10 @@ body {
   width: 6rem;
   padding: 1rem;
   font-size: inherit;
+}
+.control__error-msg {
+  font-size: 1.6rem;
+  padding: 0.5rem 0;
 }
 .control__slider {
   cursor: pointer;

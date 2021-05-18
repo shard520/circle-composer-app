@@ -3,7 +3,7 @@
     text-align: center;
   }
 
-  padding: 3rem;
+  padding: 1.5rem 3rem;
   font-size: 2rem;
   display: inline-block;
 
@@ -11,6 +11,11 @@
     width: 6rem;
     padding: 1rem;
     font-size: inherit;
+  }
+
+  &__error-msg {
+    font-size: 1.6rem;
+    padding: 0.5rem 0;
   }
 
   &__slider {
