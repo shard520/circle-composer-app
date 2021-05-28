@@ -1,8 +1,17 @@
 :root {
-  --circle-background: #c6d2eb98;
+  // COLOURS
+  --black-main: #0f0f0f;
   --on-color: #bacc6e;
   --off-color: #cc584a;
   --current-color: #fff;
+  --main-background-color: #f5deb3;
+  --purple-accent-color: #c7b3f5;
+  --light-purple-accent-color: #d8caf8;
+  --green-accent-color: #e1f5b3;
+
+  /* SHADOWS */
+  --shadow-main: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+  --shadow-hover: drop-shadow(5px 5px 17px rgba(0, 0, 0, 0.15));
 }
 
 *,
@@ -21,4 +30,5 @@ body {
   box-sizing: border-box;
   font-size: $default-font-size;
   font-family: $default-font-family;
+  background-color: var(--main-background-color);
 }

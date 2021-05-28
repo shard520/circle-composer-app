@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="./dev/css/main.css" />
     <title>Circle Composer App</title>
   </head>
@@ -16,6 +23,19 @@
         viewBox="0 0 52.9 52.9"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <defs xmlns="http://www.w3.org/2000/svg">
+          <filter id="dropshadow" height="130%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+            <feOffset dx="2" dy="2" result="offsetblur" />
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="0.2" />
+            </feComponentTransfer>
+            <feMerge>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
         <circle
           class="background"
           id="background"
@@ -40,7 +60,9 @@
         <circle class="cell" id="cell14" cx="11.5" cy="11.5" r="2.65" />
         <circle class="cell" id="cell15" cx="18.4" cy="6.88" r="2.65" />
       </svg>
-      <button class="btn btn--play-stop">Play</button>
+      <button class="btn btn--play-stop">
+        <p class="btn__text">Click to begin</p>
+      </button>
       <button class="btn btn--shift btn--plus">+</button>
     </div>
     <div class="control__container">

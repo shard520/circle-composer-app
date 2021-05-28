@@ -3,25 +3,32 @@
   height: 75%;
   max-width: 60rem;
   max-height: 60rem;
-  padding: 5rem;
+  padding: 2rem;
   margin: auto;
   position: relative;
+  filter: var(--shadow-main);
 }
 
 .background {
-  fill: var(--circle-background);
+  fill: var(--green-accent-color);
 }
 
 .cell {
-  fill: var(--off-color);
+  fill: var(--purple-accent-color);
   cursor: pointer;
+  stroke-width: 0.15;
+  will-change: fill, stroke;
+  transition: fill 0.2s;
+
+  &:hover {
+    fill: var(--light-purple-accent-color);
+  }
 }
 
 .on {
-  fill: var(--on-color);
+  stroke: var(--black-main);
 }
 
 .current {
   stroke: var(--current-color);
-  stroke-width: 0.5;
 }

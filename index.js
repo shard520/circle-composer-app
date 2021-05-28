@@ -23,7 +23,7 @@ const audioContext = new AudioContext();
 
 // Pass wood block element into the audio context
 const woodBlockNode = audioContext.createMediaElementSource(woodBlock);
-
+woodBlock.load();
 // Create new gain node for pattern
 const patternGainNode = audioContext.createGain();
 // Set initial pattern gain value
@@ -97,6 +97,13 @@ let BPM = parseInt(((60 / initialBpmValue) * 1000) / 4);
 let timer;
 
 // FUNCTIONS
+function init() {
+  audioContext.resume();
+  playStopBtn.firstElementChild.textContent = 'Play';
+  playStopBtn.removeEventListener('click', init);
+  playStopBtn.addEventListener('click', playOrStop);
+}
+
 function playPulseNote(pitch) {
   // Create oscillator
   const oscillator = audioContext.createOscillator();
@@ -107,6 +114,12 @@ function playPulseNote(pitch) {
   // Play oscillator for the length of 1/16th at current tempo
   oscillator.start(audioContext.currentTime);
   oscillator.stop(audioContext.currentTime + BPM / 1000);
+}
+
+function playPatternSound() {
+  woodBlock.pause();
+  woodBlock.currentTime = 0;
+  woodBlock.play();
 }
 
 // Check if sequence is currently playing then stop or start sequence accordingly and update button text and styles
@@ -120,11 +133,11 @@ function playOrStop() {
     currentNote = 0;
     // Reset timer ID to allow sequence to be restarted
     timer = 0;
-    playStopBtn.textContent = 'Play';
+    playStopBtn.firstElementChild.textContent = 'Play';
     playStopBtn.classList.toggle('btn--on');
   } else {
     playSequence();
-    playStopBtn.textContent = 'Stop';
+    playStopBtn.firstElementChild.textContent = 'Stop';
     playStopBtn.classList.toggle('btn--on');
   }
 }
@@ -143,9 +156,7 @@ function playSequence() {
 
     // Play wood block sound if current cell is on
     if (cellsArray[currentNote]) {
-      woodBlock.pause();
-      woodBlock.currentTime = 0;
-      woodBlock.play();
+      playPatternSound();
     }
 
     // Add current note style and remove from previous note
@@ -173,8 +184,7 @@ function storeCellValue(cell) {
 // When sequence is stopped, play confirmation sound if cell has been changed to on
 function playConfirmationSound(cell) {
   if (!timer && cells[cell].classList.contains('on')) {
-    woodBlock.load();
-    woodBlock.play();
+    playPatternSound();
   }
 }
 
@@ -238,7 +248,7 @@ for (let cell = 0; cell < cells.length; cell++) {
   cells[cell].addEventListener('click', () => toggleOnOff(cell));
 }
 
-playStopBtn.addEventListener('click', playOrStop);
+playStopBtn.addEventListener('click', init);
 
 // Shift pattern forward
 plusBtn.addEventListener('click', () => {
