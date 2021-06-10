@@ -5,40 +5,45 @@
   font: inherit;
 
   &--play-stop {
-    font-size: 2rem;
-    padding: 10.5%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 12rem;
+    height: 12rem;
+    grid-area: 2 / 2 / span 1 / span 1;
     filter: var(--shadow-main);
     background-color: var(--purple-accent-color);
     will-change: transform, background-color, filter;
     transition: transform 0.3s, background-color 0.2s, filter 0.3s;
 
+    @include respond(medium) {
+      grid-area: 4 / 2 / span 1 / span 1;
+    }
+
+    @include respond(small) {
+      width: 10rem;
+      height: 10rem;
+    }
+
     &:hover {
       background-color: var(--light-purple-accent-color);
       filter: var(--shadow-hover);
-      transform: translate(-50%, -52%);
+      transform: translateY(-2%);
     }
 
     &:active {
-      transform: translate(-50%, -51%);
+      transform: translateY(-1%);
       filter: var(--shadow-main);
     }
   }
 
   &__text {
-    position: absolute;
-    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    padding: 1rem;
   }
 
   &--shift {
     font-size: 3rem;
     width: 6rem;
     height: 6rem;
-    position: absolute;
-    bottom: 0;
+
     will-change: transform, background-color, filter;
     transition: transform 0.3s, background-color 0.2s, filter 0.3s;
     background-color: var(--purple-accent-color);
@@ -57,11 +62,25 @@
   }
 
   &--minus {
-    left: 10%;
+    grid-area: 3 / 1 / span 1 / span 1;
+    justify-self: start;
+    align-self: end;
+
+    @include respond(medium) {
+      grid-area: 4 / 1 / span 1 / span 1;
+      place-self: center;
+    }
   }
 
   &--plus {
-    right: 10%;
+    grid-area: 3 / 3 / span 1 / span 1;
+    justify-self: end;
+    align-self: end;
+
+    @include respond(medium) {
+      grid-area: 4 / 3 / span 1 / span 1;
+      place-self: center;
+    }
   }
 
   &:focus,

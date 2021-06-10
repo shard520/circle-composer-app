@@ -1,8 +1,7 @@
 :root {
   --black-main: #0f0f0f;
-  --on-color: #bacc6e;
-  --off-color: #cc584a;
-  --current-color: #fff;
+  --white-main: #fff;
+  --light-grey: #e6e6e6;
   --main-background-color: #f5deb3;
   --purple-accent-color: #c7b3f5;
   --light-purple-accent-color: #d8caf8;
@@ -23,6 +22,11 @@
 html {
   font-size: 62.5%;
 }
+@media only screen and (max-width: 35em) {
+  html {
+    font-size: 50%;
+  }
+}
 
 body {
   box-sizing: border-box;
@@ -42,36 +46,42 @@ body {
   font: inherit;
 }
 .btn--play-stop {
-  font-size: 2rem;
-  padding: 10.5%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 12rem;
+  height: 12rem;
+  grid-area: 2/2/span 1/span 1;
   filter: var(--shadow-main);
   background-color: var(--purple-accent-color);
   will-change: transform, background-color, filter;
   transition: transform 0.3s, background-color 0.2s, filter 0.3s;
 }
+@media only screen and (max-width: 35em) {
+  .btn--play-stop {
+    grid-area: 4/2/span 1/span 1;
+  }
+}
+@media only screen and (max-width: 25em) {
+  .btn--play-stop {
+    width: 10rem;
+    height: 10rem;
+  }
+}
 .btn--play-stop:hover {
   background-color: var(--light-purple-accent-color);
   filter: var(--shadow-hover);
-  transform: translate(-50%, -52%);
+  transform: translateY(-2%);
 }
 .btn--play-stop:active {
-  transform: translate(-50%, -51%);
+  transform: translateY(-1%);
   filter: var(--shadow-main);
 }
 .btn__text {
-  position: absolute;
-  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  padding: 1rem;
 }
 .btn--shift {
   font-size: 3rem;
   width: 6rem;
   height: 6rem;
-  position: absolute;
-  bottom: 0;
   will-change: transform, background-color, filter;
   transition: transform 0.3s, background-color 0.2s, filter 0.3s;
   background-color: var(--purple-accent-color);
@@ -87,24 +97,49 @@ body {
   filter: var(--shadow-main);
 }
 .btn--minus {
-  left: 10%;
+  grid-area: 3/1/span 1/span 1;
+  justify-self: start;
+  align-self: end;
+}
+@media only screen and (max-width: 35em) {
+  .btn--minus {
+    grid-area: 4/1/span 1/span 1;
+    place-self: center;
+  }
 }
 .btn--plus {
-  right: 10%;
+  grid-area: 3/3/span 1/span 1;
+  justify-self: end;
+  align-self: end;
+}
+@media only screen and (max-width: 35em) {
+  .btn--plus {
+    grid-area: 4/3/span 1/span 1;
+    place-self: center;
+  }
 }
 .btn:focus, .btn:active {
   outline: none;
 }
 
-.circle-container {
-  width: 75%;
-  height: 75%;
-  max-width: 60rem;
-  max-height: 60rem;
-  padding: 2rem;
+.circle__container {
+  width: 100%;
+  height: 100%;
+  max-width: 80rem;
+  max-height: 80rem;
+  padding: 6rem;
   margin: auto;
   position: relative;
   filter: var(--shadow-main);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 3rem;
+  place-items: center;
+}
+.circle__svg {
+  height: 100%;
+  grid-area: 1/1/span 3/span 3;
 }
 
 .background {
@@ -127,42 +162,63 @@ body {
 }
 
 .current {
-  stroke: var(--current-color);
+  stroke: var(--white-main);
 }
 
 .control {
-  padding: 1.5rem 3rem;
-  font-size: 2rem;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  gap: 1.5rem;
 }
 .control__container {
   text-align: center;
   padding: 2rem;
+  margin-top: -2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.control__label {
+  font-size: 2.5rem;
+  padding: 1rem;
 }
 .control__input {
-  width: 5rem;
+  width: 6rem;
   text-align: center;
   padding: 1rem;
-  font-size: inherit;
+  font-size: 2rem;
   font-family: inherit;
+  color: var(--black-main);
+  background-color: var(--light-grey);
+  border-radius: 0.5rem;
+  border: 2px solid var(--black-main);
+  filter: var(--shadow-main);
+  will-change: border-color, background-color, transform, filter;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.2s, filter 0.2s;
+}
+.control__input:focus {
+  border-color: var(--purple-accent-color);
+  background-color: var(--white-main);
+  outline: none;
+  transform: scale(110%);
+  filter: var(--shadow-hover);
 }
 .control__error-msg {
   font-size: 1.6rem;
   padding: 0.5rem 0;
+  display: none;
 }
 .control__slider {
-  cursor: pointer;
-}
-
-input[type=range] {
   -webkit-appearance: none;
-  width: 57%;
   margin: 7px 0;
   background-color: transparent;
   cursor: pointer;
+  height: 15rem;
+  transform: rotateZ(270deg);
 }
-
-input[type=range]:focus {
+.control__slider:focus {
   outline: none;
 }
 
@@ -170,14 +226,13 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 6px;
   cursor: pointer;
-  box-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.5), 0px 0px 1.5px rgba(13, 13, 13, 0.5);
+  filter: var(--shadow-main);
   background: var(--green-accent-color);
   border-radius: 10px;
   border: 0.3px solid rgba(0, 0, 0, 0.5);
 }
 
 input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.5), 0px 0px 1.5px rgba(13, 13, 13, 0.5);
   border: 1px solid rgba(0, 0, 0, 0.5);
   height: 20px;
   width: 20px;
@@ -185,7 +240,7 @@ input[type=range]::-webkit-slider-thumb {
   background: var(--purple-accent-color);
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -7.3px;
+  margin-top: -6%;
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
@@ -196,14 +251,14 @@ input[type=range]::-moz-range-track {
   width: 100%;
   height: 6px;
   cursor: pointer;
-  box-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.5), 0px 0px 1.5px rgba(13, 13, 13, 0.5);
+  filter: var(--shadow-main);
   background: var(--green-accent-color);
   border-radius: 10px;
   border: 0.3px solid rgba(0, 0, 0, 0.5);
 }
 
 input[type=range]::-moz-range-thumb {
-  box-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.5), 0px 0px 1.5px rgba(13, 13, 13, 0.5);
+  filter: var(--shadow-main);
   border: 1px solid rgba(0, 0, 0, 0.5);
   height: 20px;
   width: 20px;

@@ -1,9 +1,8 @@
 :root {
   // COLOURS
   --black-main: #0f0f0f;
-  --on-color: #bacc6e;
-  --off-color: #cc584a;
-  --current-color: #fff;
+  --white-main: #fff;
+  --light-grey: #e6e6e6;
   --main-background-color: #f5deb3;
   --purple-accent-color: #c7b3f5;
   --light-purple-accent-color: #d8caf8;
@@ -24,6 +23,10 @@
 
 html {
   font-size: 62.5%; // 1rem = 10px
+
+  @include respond(medium) {
+    font-size: 50%; // 1 rem = 8px
+  }
 }
 
 body {
