@@ -4,68 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap"
-      rel="stylesheet"
-    />
-
-    <link rel="stylesheet" href="./dev/css/main.css" />
     <title>Circle Composer App</title>
+    <link rel="stylesheet" href="./sass/main.scss" />
+    <script defer type="module" src="./js/controller.js"></script>
   </head>
   <body>
-    <div class="circle__container">
+    <div class="container__circles">
       <button class="btn btn--shift btn--minus">-</button>
-      <svg
-        class="circle__svg"
-        version="1.1"
-        viewBox="0 0 52.9 52.9"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs xmlns="http://www.w3.org/2000/svg">
-          <filter id="dropshadow" height="130%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-            <feOffset dx="2" dy="2" result="offsetblur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.2" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <circle
-          class="background"
-          id="background"
-          cx="26.5"
-          cy="26.5"
-          r="26.5"
-        />
-        <circle class="cell" id="cell0" cx="26.5" cy="5.29" r="3.2" />
-        <circle class="cell" id="cell1" cx="34.7" cy="6.88" r="2.65" />
-        <circle class="cell" id="cell2" cx="41.5" cy="11.6" r="2.65" />
-        <circle class="cell" id="cell3" cx="46" cy="18.4" r="2.65" />
-        <circle class="cell" id="cell4" cx="47.6" cy="26.5" r="3.2" />
-        <circle class="cell" id="cell5" cx="46" cy="34.5" r="2.65" />
-        <circle class="cell" id="cell6" cx="41.4" cy="41.4" r="2.65" />
-        <circle class="cell" id="cell7" cx="34.5" cy="46" r="2.65" />
-        <circle class="cell" id="cell8" cx="26.5" cy="47.6" r="3.2" />
-        <circle class="cell" id="cell9" cx="18.3" cy="46" r="2.65" />
-        <circle class="cell" id="cell10" cx="11.5" cy="41.4" r="2.65" />
-        <circle class="cell" id="cell11" cx="6.88" cy="34.5" r="2.65" />
-        <circle class="cell" id="cell12" cx="5.29" cy="26.5" r="3.2" />
-        <circle class="cell" id="cell13" cx="6.88" cy="18.3" r="2.65" />
-        <circle class="cell" id="cell14" cx="11.5" cy="11.5" r="2.65" />
-        <circle class="cell" id="cell15" cx="18.4" cy="6.88" r="2.65" />
-      </svg>
+      <div class="circle__box"></div>
       <button class="btn btn--play-stop">
         <p class="btn__text">Click to begin</p>
       </button>
       <button class="btn btn--shift btn--plus">+</button>
     </div>
-    <div class="control__container">
+    <div class="container__controls">
       <div class="control">
         <label for="pulseGainInput" class="control__label">Count Volume:</label>
         <input
@@ -140,8 +92,5 @@
         />
       </div>
     </div>
-
-    <audio src="./audio/wood_block.mp3" id="woodBlock"></audio>
-    <script src="./index.js"></script>
   </body>
 </html>

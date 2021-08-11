@@ -1,14 +1,4 @@
 .control {
-  &__container {
-    text-align: center;
-    padding: 2rem;
-    margin-top: -2rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-  }
-
   display: flex;
   flex-direction: column;
   place-items: center;

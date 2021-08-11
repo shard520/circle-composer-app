@@ -1,0 +1,32 @@
+.circle {
+  &__box {
+    margin: auto;
+    position: relative;
+    grid-area: 1 / 1 / span 3 / span 3;
+  }
+
+  &__cell {
+    position: absolute;
+    border-radius: 50%;
+    background-color: var(--purple-accent-color);
+    cursor: pointer;
+    will-change: background-color;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--light-purple-accent-color);
+    }
+  }
+}
+
+.background {
+  fill: var(--green-accent-color);
+}
+
+.on {
+  stroke: var(--black-main);
+}
+
+.current {
+  stroke: var(--white-main);
+}

@@ -1,0 +1,24 @@
+{
+  "name": "circle-composer-app",
+  "version": "0.2.0",
+  "description": "Rhythm sequencer",
+  "scripts": {
+    "start": "parcel serve ./src/index.html",
+    "build": "parcel build ./src/index.html",
+    "clean": "rm -rf dist/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shard520/circle-composer-app.git"
+  },
+  "author": "shard520",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shard520/circle-composer-app/issues"
+  },
+  "homepage": "https://github.com/shard520/circle-composer-app#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "parcel": "^2.0.0-rc.0"
+  }
+}

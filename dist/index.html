@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Composer App</title>
+    <link rel="stylesheet" href="/index.fa02a0b5.css">
+    <script defer="" src="/index.436439df.js"></script>
+  </head>
+  <body>
+    <div class="container__circles">
+      <button class="btn btn--shift btn--minus">-</button>
+      <div class="circle__box"></div>
+      <button class="btn btn--play-stop">
+        <p class="btn__text">Click to begin</p>
+      </button>
+      <button class="btn btn--shift btn--plus">+</button>
+    </div>
+    <div class="container__controls">
+      <div class="control">
+        <label for="pulseGainInput" class="control__label">Count Volume:</label>
+        <input id="pulseGainInput" type="text" placeholder="50" class="control__input" data-control="pulse">
+        <p class="control__error-msg u-hidden" id="pulseGainErrorMsg">
+          Please enter a value between 0 and 100
+        </p>
+        <input type="range" name="gain" min="0" max="100" step="1" id="pulseGainSlider" class="control__slider" data-control="pulse">
+      </div>
+
+      <div class="control">
+        <label for="patternGainInput" class="control__label">Pattern Volume:</label>
+        <input id="patternGainInput" type="text" placeholder="50" class="control__input" data-control="pattern">
+        <p class="control__error-msg u-hidden" id="patternGainErrorMsg">
+          Please enter a value between 0 and 100
+        </p>
+        <input type="range" name="gain" min="0" max="100" step="1" id="patternGainSlider" class="control__slider" data-control="pattern">
+      </div>
+
+      <div class="control">
+        <label for="tempoInput" class="control__label">Current Tempo:</label>
+        <input id="tempoInput" type="text" placeholder="60" class="control__input" data-control="tempo">
+        <p class="control__error-msg u-hidden" id="tempoErrorMsg">
+          Please enter a value between 40-240
+        </p>
+        <input type="range" name="tempo" min="40" max="240" step="1" id="tempoSlider" class="control__slider" data-control="tempo">
+      </div>
+    </div>
+  </body>
+</html>

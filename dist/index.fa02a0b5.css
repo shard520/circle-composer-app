@@ -98,7 +98,6 @@ body {
 }
 .btn--minus {
   grid-area: 3/1/span 1/span 1;
-  justify-self: start;
   align-self: end;
 }
 @media only screen and (max-width: 35em) {
@@ -109,7 +108,6 @@ body {
 }
 .btn--plus {
   grid-area: 3/3/span 1/span 1;
-  justify-self: end;
   align-self: end;
 }
 @media only screen and (max-width: 35em) {
@@ -122,38 +120,25 @@ body {
   outline: none;
 }
 
-.circle__container {
-  width: 100%;
-  height: 100%;
-  max-width: 80rem;
-  max-height: 80rem;
-  padding: 6rem;
+.circle__box {
   margin: auto;
   position: relative;
-  filter: var(--shadow-main);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 3rem;
-  place-items: center;
-}
-.circle__svg {
   grid-area: 1/1/span 3/span 3;
+}
+.circle__cell {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--purple-accent-color);
+  cursor: pointer;
+  will-change: background-color;
+  transition: background-color 0.2s;
+}
+.circle__cell:hover {
+  background-color: var(--light-purple-accent-color);
 }
 
 .background {
   fill: var(--green-accent-color);
-}
-
-.cell {
-  fill: var(--purple-accent-color);
-  cursor: pointer;
-  stroke-width: 0.15;
-  will-change: fill, stroke;
-  transition: fill 0.2s;
-}
-.cell:hover {
-  fill: var(--light-purple-accent-color);
 }
 
 .on {
@@ -168,15 +153,6 @@ body {
   display: flex;
   flex-direction: column;
   place-items: center;
-  gap: 1.5rem;
-}
-.control__container {
-  text-align: center;
-  padding: 2rem;
-  margin-top: -2rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 1.5rem;
 }
 .control__label {
@@ -306,4 +282,28 @@ input[type=range]:focus::-ms-fill-lower {
 
 input[type=range]:focus::-ms-fill-upper {
   background: rgba(245, 255, 199, 0.2);
-}/*# sourceMappingURL=main.css.map */
+}
+
+.container__circles {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  margin-bottom: 6em;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 3rem;
+  place-items: center;
+  filter: var(--shadow-main);
+}
+.container__controls {
+  text-align: center;
+  padding: 2rem;
+  margin-top: -2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+/*# sourceMappingURL=index.fa02a0b5.css.map */

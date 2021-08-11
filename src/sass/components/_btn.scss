@@ -63,7 +63,6 @@
 
   &--minus {
     grid-area: 3 / 1 / span 1 / span 1;
-    justify-self: start;
     align-self: end;
 
     @include respond(medium) {
@@ -74,7 +73,6 @@
 
   &--plus {
     grid-area: 3 / 3 / span 1 / span 1;
-    justify-self: end;
     align-self: end;
 
     @include respond(medium) {
