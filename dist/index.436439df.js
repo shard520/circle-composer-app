@@ -466,8 +466,19 @@ const controlCircleDisplay = function() {
     if (_model.state.viewportWidth !== window.innerWidth) _model.state.updateDimensions();
     _circlesViewDefault.default.render(_model.state);
 };
+const controlActiveCells = function(e) {
+    const cell = e.target;
+    if (!cell.classList.contains('circle__cell')) return;
+    // Remove focus from button
+    cell.blur();
+    const { cellNum  } = cell.dataset;
+    if (_model.state.cellsArray[cellNum]) _circlesViewDefault.default.removeActiveClass(cellNum);
+    if (!_model.state.cellsArray[cellNum]) _circlesViewDefault.default.addActiveClass(cellNum);
+    _model.state.cellsArray[cellNum] = !_model.state.cellsArray[cellNum];
+};
 const init = function() {
     _circlesViewDefault.default.addHandlerRender(controlCircleDisplay);
+    _circlesViewDefault.default.addHandlerToggleOnOff(controlActiveCells);
 };
 init();
 
@@ -12835,6 +12846,7 @@ parcelHelpers.defineInteropFlag(exports);
 var _config = require("../config");
 class CirclesView {
     _parentElement = document.querySelector('.circle__box');
+    _circles;
     _data;
     addHandlerRender(handler) {
         [
@@ -12843,6 +12855,15 @@ class CirclesView {
         ].forEach((ev)=>window.addEventListener(ev, handler)
         );
     }
+    addHandlerToggleOnOff(handler) {
+        this._parentElement.addEventListener('click', handler);
+    }
+    addActiveClass(cellNum) {
+        this._circles[cellNum].classList.add('circle__cell--on');
+    }
+    removeActiveClass(cellNum) {
+        this._circles[cellNum].classList.remove('circle__cell--on');
+    }
     render(data) {
         if (!data) return;
         this._data = data;
@@ -12850,17 +12871,17 @@ class CirclesView {
         this._parentElement.style.height = `${this._data.boxSize}px`;
         const markup = this._generateMarkup();
         this._parentElement.innerHTML = markup;
+        this._circles = document.querySelectorAll('.circle__cell');
     }
     _generateMarkup() {
-        const markup = this._data.cellCoords.map(([x, y], i)=>{
+        return this._data.cellCoords.map(([x, y], i)=>{
             const radius = this._data.boxSize / 2 * (i % this._data.pulseBeats === 0 ? _config.PULSE_BEAT_CIRCLE_DIAMETER : _config.SUBDIVISION_CIRCLE_DIAMETER);
-            return `\n          <div class ="circle__cell" style="\n            height: ${radius * 2}px;\n            width: ${radius * 2}px;\n            left: ${x - radius}px;\n            top: ${y - radius}px;\n          ">\n          </div> `;
+            return `\n          <button data-cell-num="${i}" class="btn circle__cell" style="\n            height: ${radius * 2}px;\n            width: ${radius * 2}px;\n            left: ${x - radius}px;\n            top: ${y - radius}px;\n          ">\n          </button> `;
         }).join('');
-        return markup;
     }
 }
 exports.default = new CirclesView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","../config":"beA2m"}]},["drOo7","jKMjS"], "jKMjS", "parcelRequirede53")
+},{"../config":"beA2m","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}]},["drOo7","jKMjS"], "jKMjS", "parcelRequirede53")
 
 //# sourceMappingURL=index.436439df.js.map

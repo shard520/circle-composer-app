@@ -3,30 +3,37 @@
     margin: auto;
     position: relative;
     grid-area: 1 / 1 / span 3 / span 3;
+
+    // Rotate so cell0 is on top
+    transform: rotate(-90deg);
   }
 
   &__cell {
     position: absolute;
-    border-radius: 50%;
-    background-color: var(--purple-accent-color);
-    cursor: pointer;
-    will-change: background-color;
-    transition: background-color 0.2s;
 
-    &:hover {
-      background-color: var(--light-purple-accent-color);
+    // Offset container rotation
+    transform: rotate(90deg);
+
+    &.btn:hover,
+    &.btn:focus {
+      transform: rotate(90deg) translateY($btn-hover-translate);
+    }
+
+    &.btn:active {
+      transform: rotate(90deg) translateY($btn-active-translate);
+    }
+
+    &--on {
+      background-color: var(--green-accent-color);
+
+      &.btn:hover,
+      &.btn:focus {
+        background-color: var(--light-green-accent-color);
+      }
+    }
+
+    &--current {
+      border: $btn-border-width solid var(--white-main);
     }
   }
-}
-
-.background {
-  fill: var(--green-accent-color);
-}
-
-.on {
-  stroke: var(--black-main);
-}
-
-.current {
-  stroke: var(--white-main);
 }

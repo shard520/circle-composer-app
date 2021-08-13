@@ -17,6 +17,7 @@
     "url": "https://github.com/shard520/circle-composer-app/issues"
   },
   "homepage": "https://github.com/shard520/circle-composer-app#readme",
+  "browserslist": "defaults",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0-rc.0",
     "parcel": "^2.0.0-rc.0"

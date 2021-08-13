@@ -5,10 +5,23 @@ import {
 
 class CirclesView {
   _parentElement = document.querySelector('.circle__box');
+  _circles;
   _data;
 
   addHandlerRender(handler) {
     ['load', 'resize'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
+  addHandlerToggleOnOff(handler) {
+    this._parentElement.addEventListener('click', handler);
+  }
+
+  addActiveClass(cellNum) {
+    this._circles[cellNum].classList.add('circle__cell--on');
+  }
+
+  removeActiveClass(cellNum) {
+    this._circles[cellNum].classList.remove('circle__cell--on');
   }
 
   render(data) {
@@ -22,10 +35,12 @@ class CirclesView {
     const markup = this._generateMarkup();
 
     this._parentElement.innerHTML = markup;
+
+    this._circles = document.querySelectorAll('.circle__cell');
   }
 
   _generateMarkup() {
-    const markup = this._data.cellCoords
+    return this._data.cellCoords
       .map(([x, y], i) => {
         const radius =
           (this._data.boxSize / 2) *
@@ -33,17 +48,15 @@ class CirclesView {
             ? PULSE_BEAT_CIRCLE_DIAMETER
             : SUBDIVISION_CIRCLE_DIAMETER);
         return `
-          <div class ="circle__cell" style="
+          <button data-cell-num="${i}" class="btn circle__cell" style="
             height: ${radius * 2}px;
             width: ${radius * 2}px;
             left: ${x - radius}px;
             top: ${y - radius}px;
           ">
-          </div> `;
+          </button> `;
       })
       .join('');
-
-    return markup;
   }
 }
 

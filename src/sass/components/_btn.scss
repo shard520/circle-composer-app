@@ -1,17 +1,34 @@
 .btn {
   border-radius: 50%;
-  border: 1px solid var(--black-main);
+  border: $btn-border-width solid var(--black-main);
   cursor: pointer;
   font: inherit;
+  background-color: var(--purple-accent-color);
+  filter: var(--shadow-main);
+  will-change: transform, background-color, filter;
+  transition: transform 0.3s, background-color 0.2s, filter 0.3s;
+
+  &:hover,
+  &:focus {
+    background-color: var(--light-purple-accent-color);
+    filter: var(--shadow-hover);
+    transform: translateY($btn-hover-translate);
+  }
+
+  &:active {
+    transform: translateY($btn-active-translate);
+    filter: var(--shadow-main);
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
 
   &--play-stop {
     width: 12rem;
     height: 12rem;
     grid-area: 2 / 2 / span 1 / span 1;
-    filter: var(--shadow-main);
-    background-color: var(--purple-accent-color);
-    will-change: transform, background-color, filter;
-    transition: transform 0.3s, background-color 0.2s, filter 0.3s;
 
     @include respond(medium) {
       grid-area: 4 / 2 / span 1 / span 1;
@@ -20,17 +37,6 @@
     @include respond(small) {
       width: 10rem;
       height: 10rem;
-    }
-
-    &:hover {
-      background-color: var(--light-purple-accent-color);
-      filter: var(--shadow-hover);
-      transform: translateY(-2%);
-    }
-
-    &:active {
-      transform: translateY(-1%);
-      filter: var(--shadow-main);
     }
   }
 
@@ -43,22 +49,6 @@
     font-size: 3rem;
     width: 6rem;
     height: 6rem;
-
-    will-change: transform, background-color, filter;
-    transition: transform 0.3s, background-color 0.2s, filter 0.3s;
-    background-color: var(--purple-accent-color);
-    filter: var(--shadow-main);
-
-    &:hover {
-      transform: translateY(-0.2rem);
-      background-color: var(--light-purple-accent-color);
-      filter: var(--shadow-hover);
-    }
-
-    &:active {
-      transform: translateY(-0.1rem);
-      filter: var(--shadow-main);
-    }
   }
 
   &--minus {
@@ -79,10 +69,5 @@
       grid-area: 4 / 3 / span 1 / span 1;
       place-self: center;
     }
-  }
-
-  &:focus,
-  &:active {
-    outline: none;
   }
 }

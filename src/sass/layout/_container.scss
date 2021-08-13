@@ -10,7 +10,6 @@
     grid-template-rows: repeat(3, 1fr);
     gap: 3rem;
     place-items: center;
-    filter: var(--shadow-main);
   }
 
   &__controls {
