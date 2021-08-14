@@ -14,7 +14,7 @@ export class State {
     this.updateDimensions();
   }
 
-  getBoxSize() {
+  _getBoxSize() {
     return window.innerWidth > 800 ? 800 : window.innerWidth * 0.9;
   }
 
@@ -22,9 +22,13 @@ export class State {
     return (this.BPM = parseInt(((60 / BPM) * 1000) / this.pulseBeats));
   }
 
+  updateCellsArray(newArray) {
+    this.cellsArray = [...newArray];
+  }
+
   updateDimensions() {
     this.viewportWidth = window.innerWidth;
-    this.boxSize = this.getBoxSize();
+    this.boxSize = this._getBoxSize();
     this.cellCoords = getCoords(this.numOfBeats, this.boxSize);
   }
 }

@@ -23,6 +23,7 @@
 html {
   font-size: 62.5%;
 }
+
 @media only screen and (max-width: 35em) {
   html {
     font-size: 50%;
@@ -50,57 +51,69 @@ body {
   will-change: transform, background-color, filter;
   transition: transform 0.3s, background-color 0.2s, filter 0.3s;
 }
+
 .btn:hover, .btn:focus {
   background-color: var(--light-purple-accent-color);
   filter: var(--shadow-hover);
   transform: translateY(-3%);
 }
+
 .btn:active {
   transform: translateY(-1.5%);
   filter: var(--shadow-main);
 }
+
 .btn:focus, .btn:active {
   outline: none;
 }
+
 .btn--play-stop {
   width: 12rem;
   height: 12rem;
   grid-area: 2/2/span 1/span 1;
 }
+
 @media only screen and (max-width: 35em) {
   .btn--play-stop {
     grid-area: 4/2/span 1/span 1;
   }
 }
+
 @media only screen and (max-width: 25em) {
   .btn--play-stop {
     width: 10rem;
     height: 10rem;
   }
 }
+
 .btn__text {
   font-size: 2rem;
   padding: 1rem;
 }
+
 .btn--shift {
   font-size: 3rem;
   width: 6rem;
   height: 6rem;
 }
+
 .btn--minus {
   grid-area: 3/1/span 1/span 1;
   align-self: end;
 }
+
 @media only screen and (max-width: 35em) {
   .btn--minus {
     grid-area: 4/1/span 1/span 1;
     place-self: center;
   }
 }
+
 .btn--plus {
   grid-area: 3/3/span 1/span 1;
   align-self: end;
 }
+
 @media only screen and (max-width: 35em) {
   .btn--plus {
     grid-area: 4/3/span 1/span 1;
@@ -114,22 +127,28 @@ body {
   grid-area: 1/1/span 3/span 3;
   transform: rotate(-90deg);
 }
+
 .circle__cell {
   position: absolute;
   transform: rotate(90deg);
 }
+
 .circle__cell.btn:hover, .circle__cell.btn:focus {
   transform: rotate(90deg) translateY(-3%);
 }
+
 .circle__cell.btn:active {
   transform: rotate(90deg) translateY(-1.5%);
 }
+
 .circle__cell--on {
   background-color: var(--green-accent-color);
 }
+
 .circle__cell--on.btn:hover, .circle__cell--on.btn:focus {
   background-color: var(--light-green-accent-color);
 }
+
 .circle__cell--current {
   border: 1px solid var(--white-main);
 }
@@ -140,10 +159,12 @@ body {
   place-items: center;
   gap: 1.5rem;
 }
+
 .control__label {
   font-size: 2.5rem;
   padding: 1rem;
 }
+
 .control__input {
   width: 6rem;
   text-align: center;
@@ -158,6 +179,7 @@ body {
   will-change: border-color, background-color, transform, filter;
   transition: border-color 0.2s, background-color 0.2s, transform 0.2s, filter 0.2s;
 }
+
 .control__input:focus {
   border-color: var(--purple-accent-color);
   background-color: var(--white-main);
@@ -165,11 +187,13 @@ body {
   transform: scale(110%);
   filter: var(--shadow-hover);
 }
+
 .control__error-msg {
   font-size: 1.6rem;
   padding: 0.5rem 0;
   display: none;
 }
+
 .control__slider {
   -webkit-appearance: none;
   margin: 7px 0;
@@ -178,6 +202,7 @@ body {
   height: 15rem;
   transform: rotateZ(270deg);
 }
+
 .control__slider:focus {
   outline: none;
 }
@@ -281,6 +306,7 @@ input[type=range]:focus::-ms-fill-upper {
   gap: 3rem;
   place-items: center;
 }
+
 .container__controls {
   text-align: center;
   padding: 2rem;
@@ -289,5 +315,27 @@ input[type=range]:focus::-ms-fill-upper {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
+}
+
+::-moz-placeholder {
+  color: gray;
+}
+
+:-ms-input-placeholder {
+  color: gray;
+}
+
+::placeholder {
+  color: gray;
+}
+
+.image {
+  background-image: url(https://i0.wp.com/css-tricks.com/wp-content/uploads/2019/10/parcel-01.png?ssl=1);
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  .image {
+    background-image: url(https://i0.wp.com/css-tricks.com/wp-content/uploads/2019/10/parcel-01.png?ssl=1);
+  }
 }
 /*# sourceMappingURL=index.fa02a0b5.css.map */

@@ -461,6 +461,8 @@ var _runtime = require("regenerator-runtime/runtime");
 var _model = require("./model");
 var _circlesView = require("./view/circlesView");
 var _circlesViewDefault = parcelHelpers.interopDefault(_circlesView);
+var _shiftView = require("./view/shiftView");
+var _shiftViewDefault = parcelHelpers.interopDefault(_shiftView);
 console.log(_model.state);
 const controlCircleDisplay = function() {
     if (_model.state.viewportWidth !== window.innerWidth) _model.state.updateDimensions();
@@ -471,18 +473,28 @@ const controlActiveCells = function(e) {
     if (!cell.classList.contains('circle__cell')) return;
     // Remove focus from button
     cell.blur();
+    const { cellsArray  } = _model.state;
     const { cellNum  } = cell.dataset;
-    if (_model.state.cellsArray[cellNum]) _circlesViewDefault.default.removeActiveClass(cellNum);
-    if (!_model.state.cellsArray[cellNum]) _circlesViewDefault.default.addActiveClass(cellNum);
-    _model.state.cellsArray[cellNum] = !_model.state.cellsArray[cellNum];
+    cellsArray[cellNum] = !cellsArray[cellNum];
+    _circlesViewDefault.default.updateActiveDisplay(cellsArray);
+};
+const controlShiftForward = function() {
+    _model.shiftForward();
+    _circlesViewDefault.default.updateActiveDisplay(_model.state.cellsArray);
+};
+const controlShiftBackward = function() {
+    _model.shiftBackward();
+    _circlesViewDefault.default.updateActiveDisplay(_model.state.cellsArray);
 };
 const init = function() {
     _circlesViewDefault.default.addHandlerRender(controlCircleDisplay);
     _circlesViewDefault.default.addHandlerToggleOnOff(controlActiveCells);
+    _shiftViewDefault.default.addHandlerShiftForward(controlShiftForward);
+    _shiftViewDefault.default.addHandlerShiftBackward(controlShiftBackward);
 };
 init();
 
-},{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model":"6Yfb5","./view/circlesView":"kIYbb","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"eIyVg":[function(require,module,exports) {
+},{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model":"6Yfb5","./view/circlesView":"kIYbb","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./view/shiftView":"98JRs"}],"eIyVg":[function(require,module,exports) {
 require('../modules/es.symbol');
 require('../modules/es.symbol.description');
 require('../modules/es.symbol.async-iterator');
@@ -12742,8 +12754,30 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state
 );
+parcelHelpers.export(exports, "shiftForward", ()=>shiftForward
+);
+parcelHelpers.export(exports, "shiftBackward", ()=>shiftBackward
+);
 var _state = require("./model/state");
 const state = new _state.State(16, 4, 60);
+const shiftForward = function() {
+    const { cellsArray  } = state;
+    // Create new array with values from the first to the penultimate values from cellsArray
+    const newCellsArr = cellsArray.slice(0, cellsArray.length - 1);
+    // Add the last value of cellsArray to the start of the new array
+    newCellsArr.unshift(cellsArray[cellsArray.length - 1]);
+    // Update values of cellsArray
+    state.updateCellsArray(newCellsArr);
+};
+const shiftBackward = function() {
+    const { cellsArray  } = state;
+    // Create new array with values from the second to the penultimate values from cellsArray
+    const newCellsArr = cellsArray.slice(1);
+    // Add the first value of cellsArray to the end of the new array
+    newCellsArr.push(cellsArray[0]);
+    // Update values of cellsArray
+    state.updateCellsArray(newCellsArr);
+};
 
 },{"./model/state":"69WLq","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"69WLq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -12762,15 +12796,20 @@ class State {
         this.cellsArray = new Array(this.numOfBeats).fill(false);
         this.updateDimensions();
     }
-    getBoxSize() {
+    _getBoxSize() {
         return window.innerWidth > 800 ? 800 : window.innerWidth * 0.9;
     }
     setBPM(BPM) {
         return this.BPM = parseInt(60 / BPM * 1000 / this.pulseBeats);
     }
+    updateCellsArray(newArray) {
+        this.cellsArray = [
+            ...newArray
+        ];
+    }
     updateDimensions() {
         this.viewportWidth = window.innerWidth;
-        this.boxSize = this.getBoxSize();
+        this.boxSize = this._getBoxSize();
         this.cellCoords = _getCoordsDefault.default(this.numOfBeats, this.boxSize);
     }
 }
@@ -12864,6 +12903,12 @@ class CirclesView {
     removeActiveClass(cellNum) {
         this._circles[cellNum].classList.remove('circle__cell--on');
     }
+    updateActiveDisplay(cellsArray) {
+        this._circles.forEach((_, i)=>{
+            if (cellsArray[i]) this.addActiveClass(i);
+            if (!cellsArray[i]) this.removeActiveClass(i);
+        });
+    }
     render(data) {
         if (!data) return;
         this._data = data;
@@ -12882,6 +12927,21 @@ class CirclesView {
 }
 exports.default = new CirclesView();
 
-},{"../config":"beA2m","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}]},["drOo7","jKMjS"], "jKMjS", "parcelRequirede53")
+},{"../config":"beA2m","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"98JRs":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class ShiftView {
+    _forwardBtn = document.querySelector('.btn--plus');
+    _backwardBtn = document.querySelector('.btn--minus');
+    addHandlerShiftForward(handler) {
+        this._forwardBtn.addEventListener('click', handler);
+    }
+    addHandlerShiftBackward(handler) {
+        this._backwardBtn.addEventListener('click', handler);
+    }
+}
+exports.default = new ShiftView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}]},["drOo7","jKMjS"], "jKMjS", "parcelRequirede53")
 
 //# sourceMappingURL=index.436439df.js.map

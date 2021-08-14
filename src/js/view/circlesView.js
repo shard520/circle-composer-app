@@ -24,6 +24,13 @@ class CirclesView {
     this._circles[cellNum].classList.remove('circle__cell--on');
   }
 
+  updateActiveDisplay(cellsArray) {
+    this._circles.forEach((_, i) => {
+      if (cellsArray[i]) this.addActiveClass(i);
+      if (!cellsArray[i]) this.removeActiveClass(i);
+    });
+  }
+
   render(data) {
     if (!data) return;
 

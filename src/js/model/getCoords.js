@@ -3,9 +3,9 @@ import { OUTER_CIRCLE_DIAMETER } from '../config';
 /**
  * Function to calculate the x/y coordinates of points around a circle, points are calculated from the center
  * of an element so any rendered elements will need a width and height offset to appear centered.
- * @param {Number} numOfBeats number of beats in a bar - this determines how many coordinates are returned
- * @param {Number} boxSize size in pixels of the container the coordinates will plot to
- * @returns Array of arrays containing all the x/y coordinates, outer array length is determined by numOfBeats
+ * @param {Number} numOfBeats - number of beats in a bar - this determines how many coordinates are returned
+ * @param {Number} boxSize - size in pixels of the container the coordinates will plot to
+ * @returns {[[Number,Number]]} array of arrays containing all the x/y coordinates, outer array length is determined by numOfBeats
  */
 export default function (numOfBeats, boxSize) {
   const centreX = boxSize / 2;

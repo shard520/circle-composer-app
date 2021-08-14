@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime';
 
 import * as model from './model';
 import circlesView from './view/circlesView';
+import shiftView from './view/shiftView';
 
 console.log(model.state);
 
@@ -19,16 +20,29 @@ const controlActiveCells = function (e) {
   // Remove focus from button
   cell.blur();
 
+  const { cellsArray } = model.state;
   const { cellNum } = cell.dataset;
-  if (model.state.cellsArray[cellNum]) circlesView.removeActiveClass(cellNum);
-  if (!model.state.cellsArray[cellNum]) circlesView.addActiveClass(cellNum);
 
-  model.state.cellsArray[cellNum] = !model.state.cellsArray[cellNum];
+  cellsArray[cellNum] = !cellsArray[cellNum];
+
+  circlesView.updateActiveDisplay(cellsArray);
+};
+
+const controlShiftForward = function () {
+  model.shiftForward();
+  circlesView.updateActiveDisplay(model.state.cellsArray);
+};
+
+const controlShiftBackward = function () {
+  model.shiftBackward();
+  circlesView.updateActiveDisplay(model.state.cellsArray);
 };
 
 const init = function () {
   circlesView.addHandlerRender(controlCircleDisplay);
   circlesView.addHandlerToggleOnOff(controlActiveCells);
+  shiftView.addHandlerShiftForward(controlShiftForward);
+  shiftView.addHandlerShiftBackward(controlShiftBackward);
 };
 
 init();
