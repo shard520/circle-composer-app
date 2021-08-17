@@ -1,6 +1,6 @@
 import getCoords from './getCoords';
 
-export class State {
+export default class State {
   timer;
   currentNote = 0;
 
@@ -22,6 +22,14 @@ export class State {
     return (this.BPM = parseInt(((60 / BPM) * 1000) / this.pulseBeats));
   }
 
+  setCurrentNote(num) {
+    return (this.currentNote = num);
+  }
+
+  setTimer(timer) {
+    return (this.timer = timer);
+  }
+
   updateCellsArray(newArray) {
     this.cellsArray = [...newArray];
   }
@@ -30,5 +38,9 @@ export class State {
     this.viewportWidth = window.innerWidth;
     this.boxSize = this._getBoxSize();
     this.cellCoords = getCoords(this.numOfBeats, this.boxSize);
+  }
+
+  resetTimer() {
+    return (this.timer = 0);
   }
 }

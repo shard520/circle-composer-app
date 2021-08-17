@@ -33,7 +33,7 @@
     }
 
     &--current {
-      border: $btn-border-width solid var(--white-main);
+      border-color: var(--white-main);
     }
   }
 }

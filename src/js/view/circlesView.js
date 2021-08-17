@@ -31,6 +31,14 @@ class CirclesView {
     });
   }
 
+  addCurrentDisplay(currentNote) {
+    // Add current note style and remove from previous note
+    this._circles[currentNote].classList.add('circle__cell--current');
+    this._circles[(currentNote || this._circles.length) - 1].classList.remove(
+      'circle__cell--current'
+    );
+  }
+
   render(data) {
     if (!data) return;
 
@@ -44,6 +52,8 @@ class CirclesView {
     this._parentElement.innerHTML = markup;
 
     this._circles = document.querySelectorAll('.circle__cell');
+
+    this.updateActiveDisplay(this._data.cellsArray);
   }
 
   _generateMarkup() {

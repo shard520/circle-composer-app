@@ -463,6 +463,8 @@ var _circlesView = require("./view/circlesView");
 var _circlesViewDefault = parcelHelpers.interopDefault(_circlesView);
 var _shiftView = require("./view/shiftView");
 var _shiftViewDefault = parcelHelpers.interopDefault(_shiftView);
+var _playStopView = require("./view/playStopView");
+var _playStopViewDefault = parcelHelpers.interopDefault(_playStopView);
 console.log(_model.state);
 const controlCircleDisplay = function() {
     if (_model.state.viewportWidth !== window.innerWidth) _model.state.updateDimensions();
@@ -486,15 +488,51 @@ const controlShiftBackward = function() {
     _model.shiftBackward();
     _circlesViewDefault.default.updateActiveDisplay(_model.state.cellsArray);
 };
+const controlCreateCtx = function() {
+    _model.createContext();
+    _playStopViewDefault.default.removeHandlerCreateCtx(controlCreateCtx);
+    _playStopViewDefault.default.addHandlerStartStop(controlStartStop);
+};
+const controlStartStop = function() {
+    const isPlaying = _model.state.timer;
+    if (isPlaying) {
+        _playStopViewDefault.default.toggleBtnText(isPlaying);
+        controlStopSequence();
+    } else {
+        _playStopViewDefault.default.toggleBtnText(isPlaying);
+        controlPlaySequence();
+    }
+};
+const controlPlaySequence = function() {
+    const { state  } = _model;
+    const sequence = setTimeout(()=>{
+        // Play wood block sound if current cell is on
+        if (state.cellsArray[state.currentNote]) state.rhythmAudio.play();
+        _circlesViewDefault.default.addCurrentDisplay(state.currentNote);
+        // Advance sequence to the next note
+        state.setCurrentNote(state.currentNote + 1);
+        // Reset currentNote at the end of the sequence
+        if (state.currentNote >= state.cellsArray.length) state.setCurrentNote(0);
+        // Call sequence recursively
+        controlPlaySequence();
+    }, state.BPM);
+    state.setTimer(sequence);
+};
+const controlStopSequence = function() {
+    clearTimeout(_model.state.timer);
+    _model.state.setCurrentNote(0);
+    _model.state.resetTimer();
+};
 const init = function() {
     _circlesViewDefault.default.addHandlerRender(controlCircleDisplay);
     _circlesViewDefault.default.addHandlerToggleOnOff(controlActiveCells);
     _shiftViewDefault.default.addHandlerShiftForward(controlShiftForward);
     _shiftViewDefault.default.addHandlerShiftBackward(controlShiftBackward);
+    _playStopViewDefault.default.addHandlerCreateCtx(controlCreateCtx);
 };
 init();
 
-},{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model":"6Yfb5","./view/circlesView":"kIYbb","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./view/shiftView":"98JRs"}],"eIyVg":[function(require,module,exports) {
+},{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model":"6Yfb5","./view/circlesView":"kIYbb","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./view/shiftView":"98JRs","./view/playStopView":"leAse"}],"eIyVg":[function(require,module,exports) {
 require('../modules/es.symbol');
 require('../modules/es.symbol.description');
 require('../modules/es.symbol.async-iterator');
@@ -12758,8 +12796,15 @@ parcelHelpers.export(exports, "shiftForward", ()=>shiftForward
 );
 parcelHelpers.export(exports, "shiftBackward", ()=>shiftBackward
 );
+parcelHelpers.export(exports, "createContext", ()=>createContext
+);
 var _state = require("./model/state");
-const state = new _state.State(16, 4, 60);
+var _stateDefault = parcelHelpers.interopDefault(_state);
+var _audioObj = require("./model/audioObj");
+var _audioObjDefault = parcelHelpers.interopDefault(_audioObj);
+var _woodBlockWav = require("url:../audio/wood_block.wav");
+var _woodBlockWavDefault = parcelHelpers.interopDefault(_woodBlockWav);
+const state = new _stateDefault.default(16, 4, 60);
 const shiftForward = function() {
     const { cellsArray  } = state;
     // Create new array with values from the first to the penultimate values from cellsArray
@@ -12778,12 +12823,16 @@ const shiftBackward = function() {
     // Update values of cellsArray
     state.updateCellsArray(newCellsArr);
 };
+const createContext = async function() {
+    const AudioContext1 = window.AudioContext || window.webkitAudioContext;
+    state.ctx = new AudioContext1();
+    state.rhythmAudio = new _audioObjDefault.default(_woodBlockWavDefault.default);
+    await state.rhythmAudio.createAudio(state.ctx);
+};
 
-},{"./model/state":"69WLq","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"69WLq":[function(require,module,exports) {
+},{"./model/state":"69WLq","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./model/audioObj":"kccok","url:../audio/wood_block.wav":"ijso3"}],"69WLq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "State", ()=>State
-);
 var _getCoords = require("./getCoords");
 var _getCoordsDefault = parcelHelpers.interopDefault(_getCoords);
 class State {
@@ -12802,6 +12851,12 @@ class State {
     setBPM(BPM) {
         return this.BPM = parseInt(60 / BPM * 1000 / this.pulseBeats);
     }
+    setCurrentNote(num) {
+        return this.currentNote = num;
+    }
+    setTimer(timer) {
+        return this.timer = timer;
+    }
     updateCellsArray(newArray) {
         this.cellsArray = [
             ...newArray
@@ -12812,7 +12867,11 @@ class State {
         this.boxSize = this._getBoxSize();
         this.cellCoords = _getCoordsDefault.default(this.numOfBeats, this.boxSize);
     }
+    resetTimer() {
+        return this.timer = 0;
+    }
 }
+exports.default = State;
 
 },{"./getCoords":"gccGz","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"gccGz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -12879,6 +12938,75 @@ exports.export = function(dest, destName, get) {
     });
 };
 
+},{}],"kccok":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class AudioObj {
+    _file;
+    _buffer;
+    _audio;
+    _ctx;
+    _source;
+    constructor(url){
+        this._url = url;
+    }
+    async createAudio(ctx) {
+        try {
+            this._ctx = ctx;
+            this._file = await fetch(this._url);
+            this._buffer = await this._file.arrayBuffer();
+            this._audio = await this._ctx.decodeAudioData(this._buffer);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    play() {
+        this._source = this._ctx.createBufferSource();
+        this._source.buffer = this._audio;
+        this._source.connect(this._ctx.destination);
+        this._source.start();
+    }
+}
+exports.default = AudioObj;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"ijso3":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8LZRF') + "wood_block.e86c2f2f.wav";
+
+},{"./helpers/bundle-url":"8YnfL"}],"8YnfL":[function(require,module,exports) {
+"use strict";
+var bundleURL = {
+};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return '/';
+}
+function getBaseURL(url) {
+    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+    if (!matches) throw new Error('Origin not found');
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
 },{}],"kIYbb":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -12909,6 +13037,11 @@ class CirclesView {
             if (!cellsArray[i]) this.removeActiveClass(i);
         });
     }
+    addCurrentDisplay(currentNote) {
+        // Add current note style and remove from previous note
+        this._circles[currentNote].classList.add('circle__cell--current');
+        this._circles[(currentNote || this._circles.length) - 1].classList.remove('circle__cell--current');
+    }
     render(data) {
         if (!data) return;
         this._data = data;
@@ -12917,6 +13050,7 @@ class CirclesView {
         const markup = this._generateMarkup();
         this._parentElement.innerHTML = markup;
         this._circles = document.querySelectorAll('.circle__cell');
+        this.updateActiveDisplay(this._data.cellsArray);
     }
     _generateMarkup() {
         return this._data.cellCoords.map(([x, y], i)=>{
@@ -12941,6 +13075,28 @@ class ShiftView {
     }
 }
 exports.default = new ShiftView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"leAse":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class PlayStopView {
+    _parentElement = document.querySelector('.btn--play-stop');
+    addHandlerCreateCtx(handler) {
+        this._parentElement.addEventListener('click', handler);
+    }
+    removeHandlerCreateCtx(handler) {
+        this._parentElement.removeEventListener('click', handler);
+    }
+    addHandlerStartStop(handler) {
+        this._parentElement.addEventListener('click', handler);
+        this._parentElement.innerHTML = `<p class="btn__text">Play</p>`;
+    }
+    toggleBtnText(isPlaying) {
+        const text = isPlaying ? 'Play' : 'Stop';
+        this._parentElement.innerHTML = `<p class="btn__text">${text}</p>`;
+    }
+}
+exports.default = new PlayStopView();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}]},["drOo7","jKMjS"], "jKMjS", "parcelRequirede53")
 

@@ -1,4 +1,7 @@
-import { State } from './model/state';
+import State from './model/state';
+import AudioObj from './model/audioObj';
+
+import woodBlockWAV from 'url:../audio/wood_block.wav';
 
 export const state = new State(16, 4, 60);
 
@@ -24,4 +27,13 @@ export const shiftBackward = function () {
 
   // Update values of cellsArray
   state.updateCellsArray(newCellsArr);
+};
+
+export const createContext = async function () {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  state.ctx = new AudioContext();
+
+  state.rhythmAudio = new AudioObj(woodBlockWAV);
+
+  await state.rhythmAudio.createAudio(state.ctx);
 };
