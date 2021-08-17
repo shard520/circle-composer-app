@@ -2,6 +2,8 @@ import State from './model/state';
 import AudioObj from './model/audioObj';
 
 import woodBlockWAV from 'url:../audio/wood_block.wav';
+import shakerHighWAV from 'url:../audio/shaker_high.wav';
+import shakerLowWAV from 'url:../audio/shaker_low.wav';
 
 export const state = new State(16, 4, 60);
 
@@ -29,11 +31,21 @@ export const shiftBackward = function () {
   state.updateCellsArray(newCellsArr);
 };
 
-export const createContext = async function () {
+export const createContext = function () {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
+
   state.ctx = new AudioContext();
 
-  state.rhythmAudio = new AudioObj(woodBlockWAV);
+  createAudio();
+};
 
+const createAudio = async function () {
+  state.rhythmAudio = new AudioObj(woodBlockWAV);
   await state.rhythmAudio.createAudio(state.ctx);
+
+  state.pulseAudioHigh = new AudioObj(shakerHighWAV);
+  await state.pulseAudioHigh.createAudio(state.ctx);
+
+  state.pulseAudioLow = new AudioObj(shakerLowWAV);
+  await state.pulseAudioLow.createAudio(state.ctx);
 };

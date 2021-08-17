@@ -21,12 +21,14 @@ const controlActiveCells = function (e) {
   // Remove focus from button
   cell.blur();
 
-  const { cellsArray } = model.state;
+  const { cellsArray, rhythmAudio } = model.state;
   const { cellNum } = cell.dataset;
 
   cellsArray[cellNum] = !cellsArray[cellNum];
 
   circlesView.updateActiveDisplay(cellsArray);
+
+  if (model.state.ctx) cellsArray[cellNum] && rhythmAudio.play();
 };
 
 const controlShiftForward = function () {
@@ -61,6 +63,15 @@ const controlPlaySequence = function () {
   const { state } = model;
 
   const sequence = setTimeout(() => {
+    // Play accented pulse sound for the first pulse beat of the bar
+    if (state.currentNote === 0) {
+      state.pulseAudioHigh.play();
+    }
+    // Play regular pulse sound for other pulse notes
+    else if (state.currentNote !== 0 && state.currentNote % 4 === 0) {
+      state.pulseAudioLow.play();
+    }
+
     // Play wood block sound if current cell is on
     if (state.cellsArray[state.currentNote]) {
       state.rhythmAudio.play();

@@ -475,10 +475,11 @@ const controlActiveCells = function(e) {
     if (!cell.classList.contains('circle__cell')) return;
     // Remove focus from button
     cell.blur();
-    const { cellsArray  } = _model.state;
+    const { cellsArray , rhythmAudio  } = _model.state;
     const { cellNum  } = cell.dataset;
     cellsArray[cellNum] = !cellsArray[cellNum];
     _circlesViewDefault.default.updateActiveDisplay(cellsArray);
+    if (_model.state.ctx) cellsArray[cellNum] && rhythmAudio.play();
 };
 const controlShiftForward = function() {
     _model.shiftForward();
@@ -506,6 +507,9 @@ const controlStartStop = function() {
 const controlPlaySequence = function() {
     const { state  } = _model;
     const sequence = setTimeout(()=>{
+        // Play accented pulse sound for the first pulse beat of the bar
+        if (state.currentNote === 0) state.pulseAudioHigh.play();
+        else if (state.currentNote !== 0 && state.currentNote % 4 === 0) state.pulseAudioLow.play();
         // Play wood block sound if current cell is on
         if (state.cellsArray[state.currentNote]) state.rhythmAudio.play();
         _circlesViewDefault.default.addCurrentDisplay(state.currentNote);
@@ -12804,6 +12808,10 @@ var _audioObj = require("./model/audioObj");
 var _audioObjDefault = parcelHelpers.interopDefault(_audioObj);
 var _woodBlockWav = require("url:../audio/wood_block.wav");
 var _woodBlockWavDefault = parcelHelpers.interopDefault(_woodBlockWav);
+var _shakerHighWav = require("url:../audio/shaker_high.wav");
+var _shakerHighWavDefault = parcelHelpers.interopDefault(_shakerHighWav);
+var _shakerLowWav = require("url:../audio/shaker_low.wav");
+var _shakerLowWavDefault = parcelHelpers.interopDefault(_shakerLowWav);
 const state = new _stateDefault.default(16, 4, 60);
 const shiftForward = function() {
     const { cellsArray  } = state;
@@ -12823,14 +12831,21 @@ const shiftBackward = function() {
     // Update values of cellsArray
     state.updateCellsArray(newCellsArr);
 };
-const createContext = async function() {
+const createContext = function() {
     const AudioContext1 = window.AudioContext || window.webkitAudioContext;
     state.ctx = new AudioContext1();
+    createAudio();
+};
+const createAudio = async function() {
     state.rhythmAudio = new _audioObjDefault.default(_woodBlockWavDefault.default);
     await state.rhythmAudio.createAudio(state.ctx);
+    state.pulseAudioHigh = new _audioObjDefault.default(_shakerHighWavDefault.default);
+    await state.pulseAudioHigh.createAudio(state.ctx);
+    state.pulseAudioLow = new _audioObjDefault.default(_shakerLowWavDefault.default);
+    await state.pulseAudioLow.createAudio(state.ctx);
 };
 
-},{"./model/state":"69WLq","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./model/audioObj":"kccok","url:../audio/wood_block.wav":"ijso3"}],"69WLq":[function(require,module,exports) {
+},{"./model/state":"69WLq","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./model/audioObj":"kccok","url:../audio/wood_block.wav":"ijso3","url:../audio/shaker_high.wav":"jqm0i","url:../audio/shaker_low.wav":"ae0Nb"}],"69WLq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _getCoords = require("./getCoords");
@@ -13007,7 +13022,13 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"kIYbb":[function(require,module,exports) {
+},{}],"jqm0i":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8LZRF') + "shaker_high.1e58fdb5.wav";
+
+},{"./helpers/bundle-url":"8YnfL"}],"ae0Nb":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8LZRF') + "shaker_low.c9c2226c.wav";
+
+},{"./helpers/bundle-url":"8YnfL"}],"kIYbb":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _config = require("../config");
