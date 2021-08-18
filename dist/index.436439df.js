@@ -512,7 +512,7 @@ const controlPlaySequence = function() {
         else if (state.currentNote !== 0 && state.currentNote % 4 === 0) state.pulseAudioLow.play();
         // Play wood block sound if current cell is on
         if (state.cellsArray[state.currentNote]) state.rhythmAudio.play();
-        _circlesViewDefault.default.addCurrentDisplay(state.currentNote);
+        _circlesViewDefault.default.updateCurrentDisplay(state.currentNote);
         // Advance sequence to the next note
         state.setCurrentNote(state.currentNote + 1);
         // Reset currentNote at the end of the sequence
@@ -523,9 +523,11 @@ const controlPlaySequence = function() {
     state.setTimer(sequence);
 };
 const controlStopSequence = function() {
-    clearTimeout(_model.state.timer);
-    _model.state.setCurrentNote(0);
-    _model.state.resetTimer();
+    const { state  } = _model;
+    _circlesViewDefault.default.updateCurrentDisplay(state.currentNote, false);
+    clearTimeout(state.timer);
+    state.setCurrentNote(0);
+    state.resetTimer();
 };
 const init = function() {
     _circlesViewDefault.default.addHandlerRender(controlCircleDisplay);
@@ -13058,9 +13060,11 @@ class CirclesView {
             if (!cellsArray[i]) this.removeActiveClass(i);
         });
     }
-    addCurrentDisplay(currentNote) {
-        // Add current note style and remove from previous note
-        this._circles[currentNote].classList.add('circle__cell--current');
+    updateCurrentDisplay(currentNote, isPlaying = true) {
+        // Add current note style if sequence is playing
+        if (isPlaying) this._circles[currentNote].classList.add('circle__cell--current');
+        // Remove current note style from previous beat, either the currentNote - 1,
+        // or when the currentNote is 0 then the last array element - 1
         this._circles[(currentNote || this._circles.length) - 1].classList.remove('circle__cell--current');
     }
     render(data) {
@@ -13076,7 +13080,7 @@ class CirclesView {
     _generateMarkup() {
         return this._data.cellCoords.map(([x, y], i)=>{
             const radius = this._data.boxSize / 2 * (i % this._data.pulseBeats === 0 ? _config.PULSE_BEAT_CIRCLE_DIAMETER : _config.SUBDIVISION_CIRCLE_DIAMETER);
-            return `\n          <button data-cell-num="${i}" class="btn circle__cell" style="\n            height: ${radius * 2}px;\n            width: ${radius * 2}px;\n            left: ${x - radius}px;\n            top: ${y - radius}px;\n          ">\n          </button> `;
+            return `\n          <button data-cell-num="${i}" aria-label="Toggle beat ${i + 1} on or off" \n            class="btn circle__cell" \n            style="\n              height: ${radius * 2}px;\n              width: ${radius * 2}px;\n              left: ${x - radius}px;\n              top: ${y - radius}px;\n            ">\n          </button> `;
         }).join('');
     }
 }

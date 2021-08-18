@@ -31,9 +31,13 @@ class CirclesView {
     });
   }
 
-  addCurrentDisplay(currentNote) {
-    // Add current note style and remove from previous note
-    this._circles[currentNote].classList.add('circle__cell--current');
+  updateCurrentDisplay(currentNote, isPlaying = true) {
+    // Add current note style if sequence is playing
+    if (isPlaying)
+      this._circles[currentNote].classList.add('circle__cell--current');
+
+    // Remove current note style from previous beat, either the currentNote - 1,
+    // or when the currentNote is 0 then the last array element - 1
     this._circles[(currentNote || this._circles.length) - 1].classList.remove(
       'circle__cell--current'
     );
@@ -65,12 +69,16 @@ class CirclesView {
             ? PULSE_BEAT_CIRCLE_DIAMETER
             : SUBDIVISION_CIRCLE_DIAMETER);
         return `
-          <button data-cell-num="${i}" class="btn circle__cell" style="
-            height: ${radius * 2}px;
-            width: ${radius * 2}px;
-            left: ${x - radius}px;
-            top: ${y - radius}px;
-          ">
+          <button data-cell-num="${i}" aria-label="Toggle beat ${
+          i + 1
+        } on or off" 
+            class="btn circle__cell" 
+            style="
+              height: ${radius * 2}px;
+              width: ${radius * 2}px;
+              left: ${x - radius}px;
+              top: ${y - radius}px;
+            ">
           </button> `;
       })
       .join('');

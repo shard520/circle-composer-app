@@ -77,7 +77,7 @@ const controlPlaySequence = function () {
       state.rhythmAudio.play();
     }
 
-    circlesView.addCurrentDisplay(state.currentNote);
+    circlesView.updateCurrentDisplay(state.currentNote);
 
     // Advance sequence to the next note
     state.setCurrentNote(state.currentNote + 1);
@@ -93,9 +93,12 @@ const controlPlaySequence = function () {
 };
 
 const controlStopSequence = function () {
-  clearTimeout(model.state.timer);
-  model.state.setCurrentNote(0);
-  model.state.resetTimer();
+  const { state } = model;
+
+  circlesView.updateCurrentDisplay(state.currentNote, false);
+  clearTimeout(state.timer);
+  state.setCurrentNote(0);
+  state.resetTimer();
 };
 
 const init = function () {

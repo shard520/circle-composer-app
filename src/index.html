@@ -11,11 +11,21 @@
   <body>
     <div class="container__circles">
       <div class="circle__box"></div>
-      <button class="btn btn--play-stop">
-        <p class="btn__text">Click to begin</p>
+      <button aria-labelledby="playBtn" class="btn btn--play-stop">
+        <p id="playBtn" class="btn__text">Click to begin</p>
       </button>
-      <button class="btn btn--shift btn--minus">-</button>
-      <button class="btn btn--shift btn--plus">+</button>
+      <button
+        aria-label="Shift sequence forward by 1 beat"
+        class="btn btn--shift btn--minus"
+      >
+        -
+      </button>
+      <button
+        aria-label="Shift sequence backward by 1 beat"
+        class="btn btn--shift btn--plus"
+      >
+        +
+      </button>
     </div>
     <div class="container__controls">
       <div class="control">
