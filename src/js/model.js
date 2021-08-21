@@ -5,7 +5,7 @@ import woodBlockWAV from 'url:../audio/wood_block.wav';
 import shakerHighWAV from 'url:../audio/shaker_high.wav';
 import shakerLowWAV from 'url:../audio/shaker_low.wav';
 
-export const state = new State(16, 4, 60);
+export const state = new State(16, 4, 120);
 
 export const shiftForward = function () {
   const { cellsArray } = state;

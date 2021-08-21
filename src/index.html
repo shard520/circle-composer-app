@@ -11,8 +11,8 @@
   <body>
     <div class="container__circles">
       <div class="circle__box"></div>
-      <button aria-labelledby="playBtn" class="btn btn--play-stop">
-        <p id="playBtn" class="btn__text">Click to begin</p>
+      <button aria-labelledby="playBtnText" class="btn btn--play-stop">
+        <p id="playBtnText" class="btn__text">Click to begin</p>
       </button>
       <button
         aria-label="Shift sequence forward by 1 beat"
@@ -27,80 +27,6 @@
         +
       </button>
     </div>
-    <div class="container__controls">
-      <div class="control">
-        <label for="pulseGainInput" class="control__label">Count Volume:</label>
-        <input
-          id="pulseGainInput"
-          type="text"
-          placeholder="50"
-          class="control__input"
-          data-control="pulse"
-        />
-        <p class="control__error-msg u-hidden" id="pulseGainErrorMsg">
-          Please enter a value between 0 and 100
-        </p>
-        <input
-          type="range"
-          name="gain"
-          min="0"
-          max="100"
-          step="1"
-          id="pulseGainSlider"
-          class="control__slider"
-          data-control="pulse"
-        />
-      </div>
-
-      <div class="control">
-        <label for="rhythmGainInput" class="control__label"
-          >Rhythm Volume:</label
-        >
-        <input
-          id="rhythmGainInput"
-          type="text"
-          placeholder="50"
-          class="control__input"
-          data-control="rhythm"
-        />
-        <p class="control__error-msg u-hidden" id="rhythmGainErrorMsg">
-          Please enter a value between 0 and 100
-        </p>
-        <input
-          type="range"
-          name="gain"
-          min="0"
-          max="100"
-          step="1"
-          id="rhythmGainSlider"
-          class="control__slider"
-          data-control="rhythm"
-        />
-      </div>
-
-      <div class="control">
-        <label for="tempoInput" class="control__label">Current Tempo:</label>
-        <input
-          id="tempoInput"
-          type="text"
-          placeholder="60"
-          class="control__input"
-          data-control="tempo"
-        />
-        <p class="control__error-msg u-hidden" id="tempoErrorMsg">
-          Please enter a value between 40-240
-        </p>
-        <input
-          type="range"
-          name="tempo"
-          min="40"
-          max="240"
-          step="1"
-          id="tempoSlider"
-          class="control__slider"
-          data-control="tempo"
-        />
-      </div>
-    </div>
+    <div class="container__controls"></div>
   </body>
 </html>

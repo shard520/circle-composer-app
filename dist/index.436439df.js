@@ -465,6 +465,10 @@ var _shiftView = require("./view/shiftView");
 var _shiftViewDefault = parcelHelpers.interopDefault(_shiftView);
 var _playStopView = require("./view/playStopView");
 var _playStopViewDefault = parcelHelpers.interopDefault(_playStopView);
+var _controlsBoxView = require("./view/controlsBoxView");
+var _controlsBoxViewDefault = parcelHelpers.interopDefault(_controlsBoxView);
+var _controlView = require("./view/controlView");
+var _controlViewDefault = parcelHelpers.interopDefault(_controlView);
 console.log(_model.state);
 const controlCircleDisplay = function() {
     if (_model.state.viewportWidth !== window.innerWidth) _model.state.updateDimensions();
@@ -493,6 +497,7 @@ const controlCreateCtx = function() {
     _model.createContext();
     _playStopViewDefault.default.removeHandlerCreateCtx(controlCreateCtx);
     _playStopViewDefault.default.addHandlerStartStop(controlStartStop);
+    controlInitDisplay();
 };
 const controlStartStop = function() {
     const isPlaying = _model.state.timer;
@@ -509,7 +514,7 @@ const controlPlaySequence = function() {
     const sequence = setTimeout(()=>{
         // Play accented pulse sound for the first pulse beat of the bar
         if (state.currentNote === 0) state.pulseAudioHigh.play();
-        else if (state.currentNote !== 0 && state.currentNote % 4 === 0) state.pulseAudioLow.play();
+        else if (state.currentNote !== 0 && state.currentNote % state.pulseBeats === 0) state.pulseAudioLow.play();
         // Play wood block sound if current cell is on
         if (state.cellsArray[state.currentNote]) state.rhythmAudio.play();
         _circlesViewDefault.default.updateCurrentDisplay(state.currentNote);
@@ -529,6 +534,39 @@ const controlStopSequence = function() {
     state.setCurrentNote(0);
     state.resetTimer();
 };
+const controlCreateControls = function() {
+    const controls = [];
+    const pulseGain = new _controlViewDefault.default('pulseGain', 0, 100, 'Pulse Volume');
+    const rhythmGain = new _controlViewDefault.default('rhythmGain', 0, 100, 'Rhythm Volume');
+    const tempo = new _controlViewDefault.default('tempo', 40, 240, 'Tempo');
+    controls.push(pulseGain, rhythmGain, tempo);
+    _controlsBoxViewDefault.default.render(controls);
+};
+const controlControlValueChange = function(e) {
+    const ctrl = e.target;
+    const value = +ctrl.value;
+    const controlName = ctrl.closest('.control').id;
+    switch(ctrl.dataset.control){
+        case 'tempo':
+            _model.state.setBPM(value);
+            break;
+        case 'rhythmGain':
+            _model.state.rhythmAudio.setGain(value);
+            break;
+        case 'pulseGain':
+            _model.state.pulseAudioHigh.setGain(value);
+            _model.state.pulseAudioLow.setGain(value);
+            break;
+    }
+    _controlsBoxViewDefault.default.updateValue(controlName, value);
+};
+const controlInitDisplay = function() {
+    controlCreateControls();
+    _controlsBoxViewDefault.default.addHandlerValueChange(controlControlValueChange);
+    setTimeout(()=>{
+        _controlsBoxViewDefault.default.removeHidden();
+    }, 0);
+};
 const init = function() {
     _circlesViewDefault.default.addHandlerRender(controlCircleDisplay);
     _circlesViewDefault.default.addHandlerToggleOnOff(controlActiveCells);
@@ -538,7 +576,7 @@ const init = function() {
 };
 init();
 
-},{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model":"6Yfb5","./view/circlesView":"kIYbb","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./view/shiftView":"98JRs","./view/playStopView":"leAse"}],"eIyVg":[function(require,module,exports) {
+},{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model":"6Yfb5","./view/circlesView":"kIYbb","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./view/shiftView":"98JRs","./view/playStopView":"leAse","./view/controlsBoxView":"dUzN4","./view/controlView":"9XWnt"}],"eIyVg":[function(require,module,exports) {
 require('../modules/es.symbol');
 require('../modules/es.symbol.description');
 require('../modules/es.symbol.async-iterator');
@@ -12814,7 +12852,7 @@ var _shakerHighWav = require("url:../audio/shaker_high.wav");
 var _shakerHighWavDefault = parcelHelpers.interopDefault(_shakerHighWav);
 var _shakerLowWav = require("url:../audio/shaker_low.wav");
 var _shakerLowWavDefault = parcelHelpers.interopDefault(_shakerLowWav);
-const state = new _stateDefault.default(16, 4, 60);
+const state = new _stateDefault.default(16, 4, 120);
 const shiftForward = function() {
     const { cellsArray  } = state;
     // Create new array with values from the first to the penultimate values from cellsArray
@@ -12913,12 +12951,15 @@ exports.default = function(numOfBeats, boxSize) {
 },{"../config":"beA2m","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"beA2m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "INITIAL_GAIN_VALUE", ()=>INITIAL_GAIN_VALUE
+);
 parcelHelpers.export(exports, "OUTER_CIRCLE_DIAMETER", ()=>OUTER_CIRCLE_DIAMETER
 );
 parcelHelpers.export(exports, "PULSE_BEAT_CIRCLE_DIAMETER", ()=>PULSE_BEAT_CIRCLE_DIAMETER
 );
 parcelHelpers.export(exports, "SUBDIVISION_CIRCLE_DIAMETER", ()=>SUBDIVISION_CIRCLE_DIAMETER
 );
+const INITIAL_GAIN_VALUE = 0.5;
 const OUTER_CIRCLE_DIAMETER = 0.8;
 const PULSE_BEAT_CIRCLE_DIAMETER = 0.13;
 const SUBDIVISION_CIRCLE_DIAMETER = 0.1;
@@ -12958,12 +12999,8 @@ exports.export = function(dest, destName, get) {
 },{}],"kccok":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+var _config = require("../config");
 class AudioObj {
-    _file;
-    _buffer;
-    _audio;
-    _ctx;
-    _source;
     constructor(url){
         this._url = url;
     }
@@ -12973,20 +13010,25 @@ class AudioObj {
             this._file = await fetch(this._url);
             this._buffer = await this._file.arrayBuffer();
             this._audio = await this._ctx.decodeAudioData(this._buffer);
+            this._gainNode = this._ctx.createGain();
+            this._gainNode.gain.value = _config.INITIAL_GAIN_VALUE;
         } catch (err) {
             console.error(err);
         }
     }
+    setGain(value) {
+        return this._gainNode.gain.value = value / 100;
+    }
     play() {
         this._source = this._ctx.createBufferSource();
         this._source.buffer = this._audio;
-        this._source.connect(this._ctx.destination);
+        this._source.connect(this._gainNode).connect(this._ctx.destination);
         this._source.start();
     }
 }
 exports.default = AudioObj;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"ijso3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","../config":"beA2m"}],"ijso3":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8LZRF') + "wood_block.e86c2f2f.wav";
 
 },{"./helpers/bundle-url":"8YnfL"}],"8YnfL":[function(require,module,exports) {
@@ -13122,6 +13164,65 @@ class PlayStopView {
     }
 }
 exports.default = new PlayStopView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"dUzN4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class ControlsBox {
+    _parentElement = document.querySelector('.container__controls');
+    _data;
+    addHandlerValueChange(handler) {
+        this._parentElement.addEventListener('input', handler);
+    }
+    updateValue(controlName, value) {
+        const ctrl = this._data.find((ctrlObj)=>controlName === ctrlObj._name
+        );
+        ctrl.setValue(value);
+    }
+    removeHidden() {
+        const hidden = Array.from(this._parentElement.querySelectorAll('.u-hidden.control'));
+        hidden.forEach((control)=>control.classList.remove('u-hidden', 'u-transparent')
+        );
+    }
+    render(data) {
+        if (!data) return;
+        this._data = data;
+        const markup = this._generateMarkup();
+        this._parentElement.innerHTML = markup;
+        const controls = this._parentElement.querySelectorAll('.control');
+        controls.forEach((control)=>{
+            const ctrl = this._data.find((ctrlObj)=>control.id === ctrlObj._name
+            );
+            ctrl._parentElement = control;
+        });
+    }
+    _generateMarkup() {
+        return this._data.map((control)=>control.generateMarkup(control)
+        ).join('');
+    }
+}
+exports.default = new ControlsBox();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"9XWnt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class Control {
+    constructor(name, min, max, label){
+        this._name = name;
+        this._min = min;
+        this._max = max;
+        this._label = label;
+    }
+    setValue(value) {
+        const input = this._parentElement.querySelector(`#${this._name}Input`);
+        const slider = this._parentElement.querySelector(`#${this._name}Slider`);
+        input.value = slider.value = value;
+    }
+    generateMarkup() {
+        return `\n			<div class="control u-hidden u-transparent" id="${this._name}">\n				<label for="${this._name}Input" class="control__label">${this._label}:</label>\n				<input\n					id="${this._name}Input"\n					type="text"\n					placeholder="${this._max / 2}"\n					class="control__input"\n					data-control="${this._name}"\n				/>\n				<input\n					aria-label="${this._label} range slider"\n					type="range"\n					min="${this._min}"\n					max="${this._max}"\n					step="1"\n					id="${this._name}Slider"\n					class="control__slider"\n					data-control="${this._name}"\n				/>\n			</div>\n		`;
+    }
+}
+exports.default = Control;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}]},["drOo7","jKMjS"], "jKMjS", "parcelRequirede53")
 

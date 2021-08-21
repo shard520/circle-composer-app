@@ -3,6 +3,9 @@
   flex-direction: column;
   place-items: center;
   gap: 1.5rem;
+  opacity: 1;
+  will-change: opacity;
+  transition: opacity 0.3s 0.2s;
 
   &__label {
     font-size: 2.5rem;
