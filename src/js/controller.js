@@ -142,9 +142,11 @@ const controlControlValueChange = function (e) {
 const controlInitDisplay = function () {
   controlCreateControls();
   controlsBoxView.addHandlerValueChange(controlControlValueChange);
-  setTimeout(() => {
-    controlsBoxView.removeHidden();
-  }, 0);
+
+  circlesView.revealAnimation();
+  playStopView.beginAnimation();
+  shiftView.removeHidden();
+  controlsBoxView.removeHidden();
 };
 
 const init = function () {

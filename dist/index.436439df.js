@@ -563,9 +563,10 @@ const controlControlValueChange = function(e) {
 const controlInitDisplay = function() {
     controlCreateControls();
     _controlsBoxViewDefault.default.addHandlerValueChange(controlControlValueChange);
-    setTimeout(()=>{
-        _controlsBoxViewDefault.default.removeHidden();
-    }, 0);
+    _circlesViewDefault.default.revealAnimation();
+    _playStopViewDefault.default.beginAnimation();
+    _shiftViewDefault.default.removeHidden();
+    _controlsBoxViewDefault.default.removeHidden();
 };
 const init = function() {
     _circlesViewDefault.default.addHandlerRender(controlCircleDisplay);
@@ -13109,6 +13110,13 @@ class CirclesView {
         // or when the currentNote is 0 then the last array element - 1
         this._circles[(currentNote || this._circles.length) - 1].classList.remove('circle__cell--current');
     }
+    revealAnimation() {
+        this._circles.forEach((cell, i)=>{
+            setTimeout(()=>{
+                cell.classList.remove('u-hidden', 'u-transparent');
+            }, i * 50);
+        });
+    }
     render(data) {
         if (!data) return;
         this._data = data;
@@ -13122,7 +13130,7 @@ class CirclesView {
     _generateMarkup() {
         return this._data.cellCoords.map(([x, y], i)=>{
             const radius = this._data.boxSize / 2 * (i % this._data.pulseBeats === 0 ? _config.PULSE_BEAT_CIRCLE_DIAMETER : _config.SUBDIVISION_CIRCLE_DIAMETER);
-            return `\n          <button data-cell-num="${i}" aria-label="Toggle beat ${i + 1} on or off" \n            class="btn circle__cell" \n            style="\n              height: ${radius * 2}px;\n              width: ${radius * 2}px;\n              left: ${x - radius}px;\n              top: ${y - radius}px;\n            ">\n          </button> `;
+            return `\n          <button data-cell-num="${i}" aria-label="Toggle beat ${i + 1} on or off" \n            class="btn circle__cell u-hidden u-transparent" \n            style="\n              height: ${radius * 2}px;\n              width: ${radius * 2}px;\n              left: ${x - radius}px;\n              top: ${y - radius}px;\n            ">\n          </button> `;
         }).join('');
     }
 }
@@ -13139,6 +13147,10 @@ class ShiftView {
     }
     addHandlerShiftBackward(handler) {
         this._backwardBtn.addEventListener('click', handler);
+    }
+    removeHidden() {
+        this._forwardBtn.classList.remove('u-hidden', 'u-transparent');
+        this._backwardBtn.classList.remove('u-hidden', 'u-transparent');
     }
 }
 exports.default = new ShiftView();
@@ -13161,6 +13173,10 @@ class PlayStopView {
     toggleBtnText(isPlaying) {
         const text = isPlaying ? 'Play' : 'Stop';
         this._parentElement.innerHTML = `<p class="btn__text">${text}</p>`;
+    }
+    beginAnimation() {
+        this._parentElement.blur();
+        this._parentElement.classList.remove('u-grow');
     }
 }
 exports.default = new PlayStopView();

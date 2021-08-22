@@ -49,6 +49,9 @@
     font-size: 3rem;
     width: 6rem;
     height: 6rem;
+    opacity: 1;
+    will-change: opacity;
+    transition: opacity 0.3s;
   }
 
   &--minus {

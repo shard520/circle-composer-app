@@ -8,6 +8,11 @@ class ShiftView {
   addHandlerShiftBackward(handler) {
     this._backwardBtn.addEventListener('click', handler);
   }
+
+  removeHidden() {
+    this._forwardBtn.classList.remove('u-hidden', 'u-transparent');
+    this._backwardBtn.classList.remove('u-hidden', 'u-transparent');
+  }
 }
 
 export default new ShiftView();

@@ -43,6 +43,14 @@ class CirclesView {
     );
   }
 
+  revealAnimation() {
+    this._circles.forEach((cell, i) => {
+      setTimeout(() => {
+        cell.classList.remove('u-hidden', 'u-transparent');
+      }, i * 50);
+    });
+  }
+
   render(data) {
     if (!data) return;
 
@@ -72,7 +80,7 @@ class CirclesView {
           <button data-cell-num="${i}" aria-label="Toggle beat ${
           i + 1
         } on or off" 
-            class="btn circle__cell" 
+            class="btn circle__cell u-hidden u-transparent" 
             style="
               height: ${radius * 2}px;
               width: ${radius * 2}px;

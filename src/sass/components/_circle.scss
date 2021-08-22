@@ -10,6 +10,9 @@
 
   &__cell {
     position: absolute;
+    opacity: 1;
+    will-change: opacity;
+    transition: opacity 0.3s;
 
     // Offset container rotation
     transform: rotate(90deg);

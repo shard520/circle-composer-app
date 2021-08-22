@@ -45,6 +45,10 @@ body {
   opacity: 0 !important;
 }
 
+.u-grow {
+  transform: scale(3) !important;
+}
+
 .btn {
   border-radius: 50%;
   border: 1px solid var(--black-main);
@@ -99,6 +103,9 @@ body {
   font-size: 3rem;
   width: 6rem;
   height: 6rem;
+  opacity: 1;
+  will-change: opacity;
+  transition: opacity 0.3s;
 }
 
 .btn--minus {
@@ -134,6 +141,9 @@ body {
 
 .circle__cell {
   position: absolute;
+  opacity: 1;
+  will-change: opacity;
+  transition: opacity 0.3s;
   transform: rotate(90deg);
 }
 

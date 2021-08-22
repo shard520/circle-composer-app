@@ -18,6 +18,11 @@ class PlayStopView {
     const text = isPlaying ? 'Play' : 'Stop';
     this._parentElement.innerHTML = `<p class="btn__text">${text}</p>`;
   }
+
+  beginAnimation() {
+    this._parentElement.blur();
+    this._parentElement.classList.remove('u-grow');
+  }
 }
 
 export default new PlayStopView();
