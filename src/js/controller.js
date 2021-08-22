@@ -140,9 +140,6 @@ const controlControlValueChange = function (e) {
 };
 
 const controlInitDisplay = function () {
-  controlCreateControls();
-  controlsBoxView.addHandlerValueChange(controlControlValueChange);
-
   circlesView.revealAnimation();
   playStopView.beginAnimation();
   shiftView.removeHidden();
@@ -155,6 +152,8 @@ const init = function () {
   shiftView.addHandlerShiftForward(controlShiftForward);
   shiftView.addHandlerShiftBackward(controlShiftBackward);
   playStopView.addHandlerCreateCtx(controlCreateCtx);
+  controlCreateControls();
+  controlsBoxView.addHandlerValueChange(controlControlValueChange);
 };
 
 init();

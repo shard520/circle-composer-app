@@ -561,8 +561,6 @@ const controlControlValueChange = function(e) {
     _controlsBoxViewDefault.default.updateValue(controlName, value);
 };
 const controlInitDisplay = function() {
-    controlCreateControls();
-    _controlsBoxViewDefault.default.addHandlerValueChange(controlControlValueChange);
     _circlesViewDefault.default.revealAnimation();
     _playStopViewDefault.default.beginAnimation();
     _shiftViewDefault.default.removeHidden();
@@ -574,6 +572,8 @@ const init = function() {
     _shiftViewDefault.default.addHandlerShiftForward(controlShiftForward);
     _shiftViewDefault.default.addHandlerShiftBackward(controlShiftBackward);
     _playStopViewDefault.default.addHandlerCreateCtx(controlCreateCtx);
+    controlCreateControls();
+    _controlsBoxViewDefault.default.addHandlerValueChange(controlControlValueChange);
 };
 init();
 
@@ -13130,7 +13130,7 @@ class CirclesView {
     _generateMarkup() {
         return this._data.cellCoords.map(([x, y], i)=>{
             const radius = this._data.boxSize / 2 * (i % this._data.pulseBeats === 0 ? _config.PULSE_BEAT_CIRCLE_DIAMETER : _config.SUBDIVISION_CIRCLE_DIAMETER);
-            return `\n          <button data-cell-num="${i}" aria-label="Toggle beat ${i + 1} on or off" \n            class="btn circle__cell u-hidden u-transparent" \n            style="\n              height: ${radius * 2}px;\n              width: ${radius * 2}px;\n              left: ${x - radius}px;\n              top: ${y - radius}px;\n            ">\n          </button> `;
+            return `\n          <button data-cell-num="${i}" aria-label="Toggle beat ${i + 1} on or off" \n            class="btn circle__cell ${this._data.ctx ? '' : 'u-hidden u-transparent'}" \n            style="\n              height: ${radius * 2}px;\n              width: ${radius * 2}px;\n              left: ${x - radius}px;\n              top: ${y - radius}px;\n            ">\n          </button> `;
         }).join('');
     }
 }
@@ -13167,7 +13167,10 @@ class PlayStopView {
         this._parentElement.removeEventListener('click', handler);
     }
     addHandlerStartStop(handler) {
-        this._parentElement.addEventListener('click', handler);
+        this._parentElement.addEventListener('click', ()=>{
+            this._parentElement.blur();
+            handler();
+        });
         this._parentElement.innerHTML = `<p class="btn__text">Play</p>`;
     }
     toggleBtnText(isPlaying) {

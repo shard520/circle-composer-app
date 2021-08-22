@@ -80,7 +80,9 @@ class CirclesView {
           <button data-cell-num="${i}" aria-label="Toggle beat ${
           i + 1
         } on or off" 
-            class="btn circle__cell u-hidden u-transparent" 
+            class="btn circle__cell ${
+              this._data.ctx ? '' : 'u-hidden u-transparent'
+            }" 
             style="
               height: ${radius * 2}px;
               width: ${radius * 2}px;

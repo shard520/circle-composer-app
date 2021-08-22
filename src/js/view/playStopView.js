@@ -10,7 +10,10 @@ class PlayStopView {
   }
 
   addHandlerStartStop(handler) {
-    this._parentElement.addEventListener('click', handler);
+    this._parentElement.addEventListener('click', () => {
+      this._parentElement.blur();
+      handler();
+    });
     this._parentElement.innerHTML = `<p class="btn__text">Play</p>`;
   }
 
