@@ -108,9 +108,15 @@ const controlStopSequence = function () {
 
 const controlCreateControls = function () {
   const controls = [];
-  const pulseGain = new Control('pulseGain', 0, 100, 'Pulse Volume');
-  const rhythmGain = new Control('rhythmGain', 0, 100, 'Rhythm Volume');
-  const tempo = new Control('tempo', 40, 240, 'Tempo');
+  const pulseGain = new Control('pulseGain', 0, 100, 'Pulse Volume', 'pulse');
+  const rhythmGain = new Control(
+    'rhythmGain',
+    0,
+    100,
+    'Rhythm Volume',
+    'drumsticks'
+  );
+  const tempo = new Control('tempo', 40, 240, 'Tempo', 'metronome');
 
   controls.push(pulseGain, rhythmGain, tempo);
 
