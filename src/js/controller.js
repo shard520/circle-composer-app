@@ -8,12 +8,15 @@ import playStopView from './view/playStopView';
 import controlsBoxView from './view/controlsBoxView';
 import Control from './view/controlView';
 
-console.log(model.state);
+import { SCHEDULER_LOOKAHEAD, SCHEDULER_INTERVAL } from './config';
+
+const { state } = model;
+
+console.log(state);
 
 const controlCircleDisplay = function () {
-  if (model.state.viewportWidth !== window.innerWidth)
-    model.state.updateDimensions();
-  circlesView.render(model.state);
+  if (state.viewportWidth !== window.innerWidth) state.updateDimensions();
+  circlesView.render(state);
 };
 
 const controlActiveCells = function (e) {
@@ -23,24 +26,24 @@ const controlActiveCells = function (e) {
   // Remove focus from button
   cell.blur();
 
-  const { cellsArray, rhythmAudio } = model.state;
+  const { cellsArray, rhythmAudio } = state;
   const { cellNum } = cell.dataset;
 
   cellsArray[cellNum] = !cellsArray[cellNum];
 
   circlesView.updateActiveDisplay(cellsArray);
 
-  if (model.state.ctx) cellsArray[cellNum] && rhythmAudio.play();
+  if (state.ctx) cellsArray[cellNum] && rhythmAudio.play();
 };
 
 const controlShiftForward = function () {
   model.shiftForward();
-  circlesView.updateActiveDisplay(model.state.cellsArray);
+  circlesView.updateActiveDisplay(state.cellsArray);
 };
 
 const controlShiftBackward = function () {
   model.shiftBackward();
-  circlesView.updateActiveDisplay(model.state.cellsArray);
+  circlesView.updateActiveDisplay(state.cellsArray);
 };
 
 const controlCreateCtx = function () {
@@ -51,57 +54,72 @@ const controlCreateCtx = function () {
 };
 
 const controlStartStop = function () {
-  const isPlaying = model.state.timer;
+  const isPlaying = state.timer;
 
   if (isPlaying) {
     playStopView.toggleBtnText(isPlaying);
     controlStopSequence();
   } else {
     playStopView.toggleBtnText(isPlaying);
-    controlPlaySequence();
+
+    state.setNextNoteTime(state.ctx.currentTime);
+
+    controlScheduleSequence();
   }
 };
 
-const controlPlaySequence = function () {
-  const { state } = model;
+const controlSequence = function (time) {
+  // Play accented pulse sound for the first pulse beat of the bar
+  if (state.currentNote === 0) {
+    state.pulseAudioHigh.play(time);
+  }
+  // Play regular pulse sound for other pulse notes
+  else if (
+    state.currentNote !== 0 &&
+    state.currentNote % state.pulseBeats === 0
+  ) {
+    state.pulseAudioLow.play(time);
+  }
 
-  const sequence = setTimeout(() => {
-    // Play accented pulse sound for the first pulse beat of the bar
-    if (state.currentNote === 0) {
-      state.pulseAudioHigh.play();
-    }
-    // Play regular pulse sound for other pulse notes
-    else if (
-      state.currentNote !== 0 &&
-      state.currentNote % state.pulseBeats === 0
-    ) {
-      state.pulseAudioLow.play();
-    }
+  // Play wood block sound if current cell is on
+  if (state.cellsArray[state.currentNote]) {
+    state.rhythmAudio.play(time);
+  }
+};
 
-    // Play wood block sound if current cell is on
-    if (state.cellsArray[state.currentNote]) {
-      state.rhythmAudio.play();
-    }
+const controlSetNextNote = function () {
+  const secondsPerBeat = (state.BPM * state.pulseBeats) / 1000;
+
+  // Set the next note time according to the current time signature and beat subdivision
+  state.setNextNoteTime(
+    state.nextNoteTime + (state.pulseBeats / state.numOfBeats) * secondsPerBeat
+  );
+
+  // Advance sequence to the next note
+  state.setCurrentNote(state.currentNote + 1);
+
+  // Reset currentNote at the end of the sequence
+  if (state.currentNote >= state.cellsArray.length) state.setCurrentNote(0);
+};
+
+const controlScheduleSequence = function () {
+  while (state.nextNoteTime < state.ctx.currentTime + SCHEDULER_LOOKAHEAD) {
+    controlSequence(state.nextNoteTime);
 
     circlesView.updateCurrentDisplay(state.currentNote);
 
-    // Advance sequence to the next note
-    state.setCurrentNote(state.currentNote + 1);
+    controlSetNextNote();
+  }
 
-    // Reset currentNote at the end of the sequence
-    if (state.currentNote >= state.cellsArray.length) state.setCurrentNote(0);
+  clearInterval(state.timer);
+  const timer = setInterval(controlScheduleSequence, SCHEDULER_INTERVAL);
 
-    // Call sequence recursively
-    controlPlaySequence();
-  }, state.BPM);
-
-  state.setTimer(sequence);
+  state.setTimer(timer);
 };
 
 const controlStopSequence = function () {
-  const { state } = model;
   circlesView.updateCurrentDisplay(state.currentNote, false);
-  clearTimeout(state.timer);
+  clearInterval(state.timer);
   state.setCurrentNote(0);
   state.resetTimer();
 };
@@ -131,14 +149,14 @@ const controlControlValueChange = function (e) {
 
   switch (ctrl.dataset.control) {
     case 'tempo':
-      model.state.setBPM(value);
+      state.setBPM(value);
       break;
     case 'rhythmGain':
-      model.state.rhythmAudio.setGain(value);
+      state.rhythmAudio.setGain(value);
       break;
     case 'pulseGain':
-      model.state.pulseAudioHigh.setGain(value);
-      model.state.pulseAudioLow.setGain(value);
+      state.pulseAudioHigh.setGain(value);
+      state.pulseAudioLow.setGain(value);
       break;
   }
 

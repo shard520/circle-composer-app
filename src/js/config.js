@@ -1,3 +1,9 @@
+// Lookahead time for note scheduler - in seconds
+export const SCHEDULER_LOOKAHEAD = 0.1;
+// Interval time for scheduler interval - in ms
+export const SCHEDULER_INTERVAL = 25;
+
+// Initial gain value for audio objects
 export const INITIAL_GAIN_VALUE = 0.5;
 
 // Diameters of circles as a percentage of outer container width

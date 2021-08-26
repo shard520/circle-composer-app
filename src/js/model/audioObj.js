@@ -27,13 +27,13 @@ export default class AudioObj {
     return (this._gainNode.gain.value = value / 100);
   }
 
-  play() {
+  play(time = this._ctx.currentTime) {
     this._source = this._ctx.createBufferSource();
 
     this._source.buffer = this._audio;
 
     this._source.connect(this._gainNode).connect(this._ctx.destination);
 
-    this._source.start();
+    this._source.start(time);
   }
 }

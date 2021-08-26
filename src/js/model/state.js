@@ -26,6 +26,10 @@ export default class State {
     return (this.currentNote = num);
   }
 
+  setNextNoteTime(time) {
+    return (this.nextNoteTime = time);
+  }
+
   setTimer(timer) {
     return (this.timer = timer);
   }
