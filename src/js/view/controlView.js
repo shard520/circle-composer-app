@@ -1,6 +1,19 @@
 import icons from 'url:../../icons.svg';
 
+/**
+ * Module which exports the Control class.
+ * @module Control
+ */
 export default class Control {
+  /**
+   * Constructor function to set the initial values for each control.
+   * @param {String} name - the name of the control.
+   * @param {Number} min - the minimum value of the control.
+   * @param {Number} max - the maximum value of the control.
+   * @param {String} label - the label to be displayed.
+   * @param {String} icon - the name of the icon.
+   * @returns {Void}
+   */
   constructor(name, min, max, label, icon) {
     this._name = name;
     this._min = min;
@@ -9,6 +22,11 @@ export default class Control {
     this._icon = icon;
   }
 
+  /**
+   * Sets the value on the control's input field and range slider.
+   * @param {Number} value - the value to be set.
+   * @returns {Void}
+   */
   setValue(value) {
     const input = this._parentElement.querySelector(`#${this._name}Input`);
     const slider = this._parentElement.querySelector(`#${this._name}Slider`);
@@ -16,6 +34,10 @@ export default class Control {
     input.value = slider.value = value;
   }
 
+  /**
+   * Generates the markup string for a control with the attributes set to the values contained on the instance of the control.
+   * @returns {String} a string containing the markup for a control.
+   */
   generateMarkup() {
     return `
 			<div class="control u-hidden u-transparent" id="${this._name}">

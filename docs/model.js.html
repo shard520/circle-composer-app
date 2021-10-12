@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: model.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: model.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import State from './model/state';
+import AudioObj from './model/audioObj';
+
+import woodBlockWAV from 'url:../audio/wood_block.wav';
+import shakerHighWAV from 'url:../audio/shaker_high.wav';
+import shakerLowWAV from 'url:../audio/shaker_low.wav';
+
+/**
+ * Module which exports functions and the state object from the model.
+ * @module model
+ */
+
+/**
+ * State object - this holds all data for the application.
+ * Initialised with number of beats (subdivisions), number of pulse beats (main division), and tempo in BPM
+ * See {@link module:State}
+ */
+export const state = new State(16, 4, 120);
+
+/**
+ * Shift forward function takes the current sequence and moves it forward by 1 beat.
+ * @returns {Void}
+ */
+export const shiftForward = function () {
+  const { cellsArray } = state;
+
+  // Create new array with values from the first to the penultimate values from cellsArray
+  const newCellsArr = cellsArray.slice(0, cellsArray.length - 1);
+  // Add the last value of cellsArray to the start of the new array
+  newCellsArr.unshift(cellsArray[cellsArray.length - 1]);
+
+  // Update values of cellsArray
+  state.updateCellsArray(newCellsArr);
+};
+
+/**
+ * Shift backward function takes the current sequence and moves it backward by 1 beat.
+ * @returns {Void}
+ */
+export const shiftBackward = function () {
+  const { cellsArray } = state;
+
+  // Create new array with values from the second to the penultimate values from cellsArray
+  const newCellsArr = cellsArray.slice(1);
+  // Add the first value of cellsArray to the end of the new array
+  newCellsArr.push(cellsArray[0]);
+
+  // Update values of cellsArray
+  state.updateCellsArray(newCellsArr);
+};
+
+/**
+ * Create new audio context then call {@link createAudio}
+ * @returns {Void}
+ */
+export const createContext = function () {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+  state.ctx = new AudioContext();
+
+  createAudio();
+};
+
+/**
+ * Create the audio objects used to play sequence notes and pulse beats, only called after the audio context has been created.
+ * @returns {Void}
+ */
+const createAudio = async function () {
+  state.rhythmAudio = new AudioObj(woodBlockWAV);
+  await state.rhythmAudio.createAudio(state.ctx);
+
+  state.pulseAudioHigh = new AudioObj(shakerHighWAV);
+  await state.pulseAudioHigh.createAudio(state.ctx);
+
+  state.pulseAudioLow = new AudioObj(shakerLowWAV);
+  await state.pulseAudioLow.createAudio(state.ctx);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Oct 12 2021 23:11:50 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

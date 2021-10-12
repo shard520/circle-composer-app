@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: view/playStopView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: view/playStopView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Module which exports an instance of the PlayStopView class.
+ * @module PlayStopView
+ */
+
+/**
+ * PlayStopView Class
+ */
+class PlayStopView {
+  /**
+   * @protected
+   * @property {Object} - the HTML element containing the button which creates the audio context then controls the sequence playing and stopping.
+   */
+  _parentElement = document.querySelector('.btn--play-stop');
+
+  /**
+   * Function to add a handler which is called the first time the button is clicked.
+   * See {@link controlCreateCtx}
+   * @param {Function} handler - the handler to be called when the button is clicked.
+   * @returns {Void}
+   */
+  addHandlerCreateCtx(handler) {
+    this._parentElement.addEventListener('click', handler);
+  }
+
+  /**
+   * Function to remove the handler which creates the audio context.
+   * See {@link controlCreateCtx}
+   * @param {Function} handler - the handler to be removed after context has been created.
+   * @returns {Void}
+   */
+  removeHandlerCreateCtx(handler) {
+    this._parentElement.removeEventListener('click', handler);
+  }
+
+  /**
+   * Function to add a click event listener, which removes focus from the button and calls a handler function.
+   * The function then sets the text inside the button to 'Play'.
+   * See {@link controlStartStop}
+   * @param {Function} handler - the handler funciton to be called when the button is clicked.
+   * @returns {Void}
+   */
+  addHandlerStartStop(handler) {
+    this._parentElement.addEventListener('click', () => {
+      this._parentElement.blur();
+      handler();
+    });
+    this._parentElement.innerHTML = `&lt;p class="btn__text">Play&lt;/p>`;
+  }
+
+  /**
+   * This method sets the text inside the button to either 'Play' or 'Stop', depending on the value of the argument passed.
+   * @param {Number|Undefined} isPlaying - either the ID of the sequence timer, or undefined to represent a falsey value
+   * @returns {Void}
+   */
+  toggleBtnText(isPlaying) {
+    const text = isPlaying ? 'Play' : 'Stop';
+    this._parentElement.innerHTML = `&lt;p class="btn__text">${text}&lt;/p>`;
+  }
+
+  /**
+   * Function to remove focus and the grow CSS class when the button is clicked for the first time.
+   * @returns {Void}
+   */
+  beginAnimation() {
+    this._parentElement.blur();
+    this._parentElement.classList.remove('u-grow');
+  }
+}
+
+export default new PlayStopView();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Oct 12 2021 23:11:50 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

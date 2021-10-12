@@ -11,8 +11,8 @@
   &__cell {
     position: absolute;
     opacity: 1;
-    will-change: opacity;
-    transition: opacity 0.3s;
+    will-change: opacity, background-color;
+    transition: opacity 0.3s, background-color 0.2s;
 
     // Offset container rotation
     transform: rotate(90deg);
@@ -37,6 +37,19 @@
 
     &--current {
       border-color: var(--white-main);
+    }
+
+    &:before {
+      content: '';
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: var(--white-main) 3px solid;
+      border-radius: 50rem;
+      transform: scale(1.3);
+      opacity: 0;
+      will-change: transform, opacity;
+      transition: transform 0.3s, opacity 0.3s;
     }
   }
 }
