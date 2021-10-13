@@ -31,6 +31,13 @@
     }
   }
 
+  &__range-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
   &__slider {
     -webkit-appearance: none;
     margin: 1rem 0;

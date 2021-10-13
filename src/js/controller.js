@@ -204,14 +204,32 @@ const controlStopSequence = function () {
  */
 const controlCreateControls = function () {
   const controls = [];
-  const tempo = new Control('tempo', 40, 240, 'Tempo', 'metronome');
-  const pulseGain = new Control('pulseGain', 0, 100, 'Pulse Volume', 'pulse');
+  const tempo = new Control(
+    'tempo',
+    40,
+    240,
+    'Tempo',
+    'metronome',
+    'minus-circle',
+    'add-circle'
+  );
+  const pulseGain = new Control(
+    'pulseGain',
+    0,
+    100,
+    'Pulse volume',
+    'pulse',
+    'speaker-quieter',
+    'speaker-louder'
+  );
   const rhythmGain = new Control(
     'rhythmGain',
     0,
     100,
-    'Rhythm Volume',
-    'drumsticks'
+    'Rhythm volume',
+    'drumsticks',
+    'speaker-quieter',
+    'speaker-louder'
   );
 
   controls.push(tempo, pulseGain, rhythmGain);

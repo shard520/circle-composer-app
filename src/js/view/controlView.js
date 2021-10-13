@@ -11,15 +11,19 @@ export default class Control {
    * @param {Number} min - the minimum value of the control.
    * @param {Number} max - the maximum value of the control.
    * @param {String} label - the label to be displayed.
-   * @param {String} icon - the name of the icon.
+   * @param {String} icon - the name of the icon which describes the control.
+   * @param {String} downIcon - the name of the icon which decreases the value.
+   * @param {String} upIcon - the name of the icon which increases the value.
    * @returns {Void}
    */
-  constructor(name, min, max, label, icon) {
+  constructor(name, min, max, label, icon, downIcon, upIcon) {
     this._name = name;
     this._min = min;
     this._max = max;
     this._label = label;
     this._icon = icon;
+    this._downIcon = downIcon;
+    this._upIcon = upIcon;
   }
 
   /**
@@ -55,16 +59,28 @@ export default class Control {
 					class="control__input"
 					data-control="${this._name}"
 				/>
-				<input
-					aria-label="${this._label} range slider"
-					type="range"
-					min="${this._min}"
-					max="${this._max}"
-					step="1"
-					id="${this._name}Slider"
-					class="control__slider"
-					data-control="${this._name}"
-				/>
+        <div class="control__range-wrapper">
+          <svg aria-label="${
+            this._label
+          } down" class="icon icon__control-up-down">
+						<use href="${icons}#icon-${this._downIcon}"></use>
+					</svg>
+				  <input
+            aria-label="${this._label} range slider"
+            type="range"
+            min="${this._min}"
+            max="${this._max}"
+            step="1"
+            id="${this._name}Slider"
+            class="control__slider"
+            data-control="${this._name}"
+          />
+          <svg aria-label="${
+            this._label
+          } up" class="icon icon__control-up-down">
+            <use href="${icons}#icon-${this._upIcon}"></use>
+					</svg>
+        </div>
 			</div>
 		`;
   }
