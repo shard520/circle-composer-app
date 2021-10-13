@@ -40,12 +40,15 @@
     }
   }
 
-  &__text {
+  &__playStop {
     font-size: 2rem;
     padding: 1rem;
   }
 
   &--shift {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 3rem;
     width: 6rem;
     height: 6rem;

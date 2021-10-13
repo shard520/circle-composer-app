@@ -1,6 +1,6 @@
 {
   "name": "circle-composer-app",
-  "version": "0.2.0",
+  "version": "0.9.1",
   "description": "Rhythm sequencer",
   "default": "index.html",
   "scripts": {

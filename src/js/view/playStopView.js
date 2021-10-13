@@ -1,3 +1,5 @@
+import icons from 'url:../../icons.svg';
+
 /**
  * Module which exports an instance of the PlayStopView class.
  * @module PlayStopView
@@ -45,7 +47,11 @@ class PlayStopView {
       this._parentElement.blur();
       handler();
     });
-    this._parentElement.innerHTML = `<p class="btn__text">Play</p>`;
+    this._parentElement.innerHTML = `<p class="btn__playStop">
+        <svg class="icon icon__playStop icon__playStop--play">
+					<use href="${icons}#icon-play"></use>
+				</svg>
+      </p>`;
   }
 
   /**
@@ -54,8 +60,14 @@ class PlayStopView {
    * @returns {Void}
    */
   toggleBtnText(isPlaying) {
-    const text = isPlaying ? 'Play' : 'Stop';
-    this._parentElement.innerHTML = `<p class="btn__text">${text}</p>`;
+    const icon = isPlaying
+      ? `<svg class="icon icon__playStop icon__playStop--play">
+          <use href="${icons}#icon-play"></use>
+        </svg>`
+      : `<svg class="icon icon__playStop icon__playStop--stop">
+          <use href="${icons}#icon-stop"></use>
+        </svg>`;
+    this._parentElement.innerHTML = `<p class="btn__playStop">${icon}</p>`;
   }
 
   /**
