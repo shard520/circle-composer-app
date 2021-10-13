@@ -328,6 +328,10 @@ input[type=range]:focus::-ms-fill-upper {
   fill: var(--black-main);
 }
 
+.icon__playStop {
+  fill: var(--black-main);
+}
+
 .icon__playStop--play {
   width: 7rem;
   height: 7rem;

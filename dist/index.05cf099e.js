@@ -613,10 +613,10 @@ const { state  } = _model;
  * @returns {Void}
  */ const controlCreateControls = function() {
     const controls = [];
+    const tempo = new _controlViewDefault.default('tempo', 40, 240, 'Tempo', 'metronome');
     const pulseGain = new _controlViewDefault.default('pulseGain', 0, 100, 'Pulse Volume', 'pulse');
     const rhythmGain = new _controlViewDefault.default('rhythmGain', 0, 100, 'Rhythm Volume', 'drumsticks');
-    const tempo = new _controlViewDefault.default('tempo', 40, 240, 'Tempo', 'metronome');
-    controls.push(pulseGain, rhythmGain, tempo);
+    controls.push(tempo, pulseGain, rhythmGain);
     _controlsBoxViewDefault.default.render(controls);
 };
 /**

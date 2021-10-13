@@ -204,6 +204,7 @@ const controlStopSequence = function () {
  */
 const controlCreateControls = function () {
   const controls = [];
+  const tempo = new Control('tempo', 40, 240, 'Tempo', 'metronome');
   const pulseGain = new Control('pulseGain', 0, 100, 'Pulse Volume', 'pulse');
   const rhythmGain = new Control(
     'rhythmGain',
@@ -212,9 +213,8 @@ const controlCreateControls = function () {
     'Rhythm Volume',
     'drumsticks'
   );
-  const tempo = new Control('tempo', 40, 240, 'Tempo', 'metronome');
 
-  controls.push(pulseGain, rhythmGain, tempo);
+  controls.push(tempo, pulseGain, rhythmGain);
 
   controlsBoxView.render(controls);
 };
