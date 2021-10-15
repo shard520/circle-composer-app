@@ -35,6 +35,7 @@ export default class Control {
     const input = this._parentElement.querySelector(`#${this._name}Input`);
     const slider = this._parentElement.querySelector(`#${this._name}Slider`);
 
+    // set the input and slider values to the value of the argument passed to the function.
     input.value = slider.value = value;
   }
 
@@ -60,7 +61,7 @@ export default class Control {
 					data-control="${this._name}"
 				/>
         <div class="control__range-wrapper">
-          <svg aria-label="${
+          <svg data-btn="down" aria-label="${
             this._label
           } down" class="icon icon__control-up-down">
 						<use href="${icons}#icon-${this._downIcon}"></use>
@@ -75,7 +76,7 @@ export default class Control {
             class="control__slider"
             data-control="${this._name}"
           />
-          <svg aria-label="${
+          <svg data-btn="up" aria-label="${
             this._label
           } up" class="icon icon__control-up-down">
             <use href="${icons}#icon-${this._upIcon}"></use>

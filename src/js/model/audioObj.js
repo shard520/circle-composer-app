@@ -66,12 +66,25 @@ export default class AudioObj {
   }
 
   /**
-   * Set the gain (volume) on the audio object
+   * Setter to set the gain (volume) on the audio object. This value is stored on the AudioParam node
+   * as a 32-bit number so Math.fround is used to preserve precision when converting from 64-bit to 32-bit,
+   * however the value set will not always be equal to the argument passed.
+   * See {@link https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation}
    * @param {Number} value - a percentage value of gain
    * @returns Number - gain percentage as a number between 0-1
    */
-  setGain(value) {
-    return (this._gainNode.gain.value = value / 100);
+  set gain(value) {
+    return (this._gainNode.gain.value = Math.fround(value / 100));
+  }
+
+  /**
+   * Getter which returns the current gain value. This value is returned as a rounded integer due to the imprecision
+   * of the 32-bit value stored by the Web Audio API.
+   * See {@link https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation}
+   * @returns {Number} - the current gain value as a percentage
+   */
+  get gain() {
+    return Math.round(this._gainNode.gain.value * 100);
   }
 
   /**

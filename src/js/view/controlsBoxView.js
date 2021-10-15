@@ -24,6 +24,15 @@ class ControlsBox {
   }
 
   /**
+   * Function which calls a handler when a control button is clicked.
+   * See {@link controlControlBtnClick}
+   * @param {Function} handler - handler function called when a button is clicked.
+   */
+  addHandlerUpDownBtns(handler) {
+    this._parentElement.addEventListener('click', handler);
+  }
+
+  /**
    * This method finds the control to be updated then calls the setValue method on it, passing the value to be changed.
    * @param {String} controlName - the name of the control whose value will be updated.
    * @param {Number} value - the value to update to.

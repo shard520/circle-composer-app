@@ -142,7 +142,7 @@ const controlSequence = function (time) {
  * @returns {Void}
  */
 const controlSetNextNote = function () {
-  const secondsPerBeat = (state.BPM * state.pulseBeats) / 1000;
+  const secondsPerBeat = 60 / state.BPM;
 
   // Set the next note time according to the current time signature and beat subdivision
   state.setNextNoteTime(
@@ -251,15 +251,48 @@ const controlControlValueChange = function (e) {
 
   switch (ctrl.dataset.control) {
     case 'tempo':
-      state.setBPM(value);
+      state.BPM = value;
       break;
     case 'rhythmGain':
-      state.rhythmAudio.setGain(value);
+      state.rhythmAudio.gain = value;
       break;
     case 'pulseGain':
-      state.pulseAudioHigh.setGain(value);
-      state.pulseAudioLow.setGain(value);
+      state.pulseAudioHigh.gain = value;
+      state.pulseAudioLow.gain = value;
       break;
+  }
+
+  controlsBoxView.updateValue(controlName, value);
+};
+
+/**
+ * Handler function which increments or decrements the value of the control
+ * depending on which button was clicked, then updates the control display.
+ * @param {Object} e - the event which called the handler
+ * @returns {Void}
+ */
+const controlControlBtnClick = function (e) {
+  const ctrl = e.target;
+  const btn = ctrl.dataset.btn;
+
+  if (!btn) return;
+
+  const controlName = ctrl.closest('.control').id;
+
+  let value = 0;
+
+  if (controlName === 'tempo') value = state.BPM;
+  if (controlName === 'rhythmGain') value = state.rhythmAudio.gain;
+  if (controlName === 'pulseGain') {
+    value = state.pulseAudioHigh.gain;
+  }
+
+  value = btn === 'up' ? ++value : --value;
+
+  if (controlName === 'tempo') state.BPM = value;
+  if (controlName === 'rhythmGain') state.rhythmAudio.gain = value;
+  if (controlName === 'pulseGain') {
+    state.pulseAudioHigh.gain = state.pulseAudioLow.gain = value;
   }
 
   controlsBoxView.updateValue(controlName, value);
@@ -291,6 +324,8 @@ const init = function () {
   playStopView.addHandlerCreateCtx(controlCreateCtx);
   controlCreateControls();
   controlsBoxView.addHandlerValueChange(controlControlValueChange);
+  controlsBoxView.addHandlerUpDownBtns(controlControlBtnClick);
+  console.log(state);
 };
 
 init();

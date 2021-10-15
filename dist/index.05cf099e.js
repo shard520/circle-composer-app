@@ -569,7 +569,7 @@ const { state  } = _model;
  * advances the sequence to the next note. If the sequence has completed then the current note is reset to 0.
  * @returns {Void}
  */ const controlSetNextNote = function() {
-    const secondsPerBeat = state.BPM * state.pulseBeats / 1000; // Set the next note time according to the current time signature and beat subdivision
+    const secondsPerBeat = 60 / state.BPM; // Set the next note time according to the current time signature and beat subdivision
     state.setNextNoteTime(state.nextNoteTime + state.pulseBeats / state.numOfBeats * secondsPerBeat); // Advance sequence to the next note
     state.setCurrentNote(state.currentNote + 1); // Reset currentNote at the end of the sequence
     if (state.currentNote >= state.cellsArray.length) state.setCurrentNote(0);
@@ -630,16 +630,36 @@ const { state  } = _model;
     const controlName = ctrl.closest('.control').id;
     switch(ctrl.dataset.control){
         case 'tempo':
-            state.setBPM(value);
+            state.BPM = value;
             break;
         case 'rhythmGain':
-            state.rhythmAudio.setGain(value);
+            state.rhythmAudio.gain = value;
             break;
         case 'pulseGain':
-            state.pulseAudioHigh.setGain(value);
-            state.pulseAudioLow.setGain(value);
+            state.pulseAudioHigh.gain = value;
+            state.pulseAudioLow.gain = value;
             break;
     }
+    _controlsBoxViewDefault.default.updateValue(controlName, value);
+};
+/**
+ * Handler function which increments or decrements the value of the control
+ * depending on which button was clicked, then updates the control display.
+ * @param {Object} e - the event which called the handler
+ * @returns {Void}
+ */ const controlControlBtnClick = function(e) {
+    const ctrl = e.target;
+    const btn = ctrl.dataset.btn;
+    if (!btn) return;
+    const controlName = ctrl.closest('.control').id;
+    let value = 0;
+    if (controlName === 'tempo') value = state.BPM;
+    if (controlName === 'rhythmGain') value = state.rhythmAudio.gain;
+    if (controlName === 'pulseGain') value = state.pulseAudioHigh.gain;
+    value = btn === 'up' ? ++value : --value;
+    if (controlName === 'tempo') state.BPM = value;
+    if (controlName === 'rhythmGain') state.rhythmAudio.gain = value;
+    if (controlName === 'pulseGain') state.pulseAudioHigh.gain = state.pulseAudioLow.gain = value;
     _controlsBoxViewDefault.default.updateValue(controlName, value);
 };
 /**
@@ -665,6 +685,8 @@ const { state  } = _model;
     _playStopViewDefault.default.addHandlerCreateCtx(controlCreateCtx);
     controlCreateControls();
     _controlsBoxViewDefault.default.addHandlerValueChange(controlControlValueChange);
+    _controlsBoxViewDefault.default.addHandlerUpDownBtns(controlControlBtnClick);
+    console.log(state);
 };
 init();
 
@@ -13327,7 +13349,7 @@ class State {
    */ constructor(numOfBeats, pulseBeats, BPM){
         this.numOfBeats = numOfBeats;
         this.pulseBeats = pulseBeats;
-        this.BPM = this.setBPM(BPM);
+        this._BPM = BPM;
         /**
      * @property {Array} - an array of booleans with length equal to the number of beats, initialised to false.
      * When a cell is activated in the UI the controller sets the array value at the corresponding index position to true.
@@ -13343,11 +13365,17 @@ class State {
         return window.innerWidth > 800 ? 800 : window.innerWidth * 0.9;
     }
     /**
-   * Function to convert the tempo in beats per minute and return the length of time 1 subdivision beat takes at that tempo.
+   * Setter function to set the tempo in beats per minute.
    * @param {Number} BPM - the tempo of the sequence measured in beats per minute.
-   * @returns {Number} the time in milliseconds for 1 subdivision beat at the current tempo.
-   */ setBPM(BPM) {
-        return this.BPM = parseInt(60 / BPM * 1000 / this.pulseBeats);
+   * @returns {Number} the current tempo in beats per minute.
+   */ set BPM(BPM) {
+        return this._BPM = BPM;
+    }
+    /**
+   * Getter function which returns the BPM value.
+   * @returns {Number} the tempo expressed as BPM.
+   */ get BPM() {
+        return this._BPM;
     }
     /**
    * Set the current note in the sequence.
@@ -13526,11 +13554,22 @@ class AudioObj {
         }
     }
     /**
-   * Set the gain (volume) on the audio object
+   * Setter to set the gain (volume) on the audio object. This value is stored on the AudioParam node
+   * as a 32-bit number so Math.fround is used to preserve precision when converting from 64-bit to 32-bit,
+   * however the value set will not always be equal to the argument passed.
+   * See {@link https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation}
    * @param {Number} value - a percentage value of gain
    * @returns Number - gain percentage as a number between 0-1
-   */ setGain(value) {
-        return this._gainNode.gain.value = value / 100;
+   */ set gain(value) {
+        return this._gainNode.gain.value = Math.fround(value / 100);
+    }
+    /**
+   * Getter which returns the current gain value. This value is returned as a rounded integer due to the imprecision
+   * of the 32-bit value stored by the Web Audio API.
+   * See {@link https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation}
+   * @returns {Number} - the current gain value as a percentage
+   */ get gain() {
+        return Math.round(this._gainNode.gain.value * 100);
     }
     /**
    * Play audio at a given time according to the current gain value
@@ -13843,7 +13882,7 @@ var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 }
 exports.default = new PlayStopView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","url:../../icons.svg":"awZjJ"}],"awZjJ":[function(require,module,exports) {
+},{"url:../../icons.svg":"awZjJ","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"awZjJ":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('71ti3') + "icons.b79ab256.svg" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"chiK4"}],"c71zr":[function(require,module,exports) {
@@ -13866,6 +13905,13 @@ parcelHelpers.defineInteropFlag(exports);
    * @returns {Void}
    */ addHandlerValueChange(handler) {
         this._parentElement.addEventListener('input', handler);
+    }
+    /**
+   * Function which calls a handler when a control button is clicked.
+   * See {@link controlControlBtnClick}
+   * @param {Function} handler - handler function called when a button is clicked.
+   */ addHandlerUpDownBtns(handler) {
+        this._parentElement.addEventListener('click', handler);
     }
     /**
    * This method finds the control to be updated then calls the setValue method on it, passing the value to be changed.
@@ -13943,7 +13989,7 @@ class Control {
    * @returns {Void}
    */ setValue(value) {
         const input = this._parentElement.querySelector(`#${this._name}Input`);
-        const slider = this._parentElement.querySelector(`#${this._name}Slider`);
+        const slider = this._parentElement.querySelector(`#${this._name}Slider`); // set the input and slider values to the value of the argument passed to the function.
         input.value = slider.value = value;
     }
     /**
@@ -13965,7 +14011,7 @@ class Control {
 					data-control="${this._name}"
 				/>
         <div class="control__range-wrapper">
-          <svg aria-label="${this._label} down" class="icon icon__control-up-down">
+          <svg data-btn="down" aria-label="${this._label} down" class="icon icon__control-up-down">
 						<use href="${_iconsSvgDefault.default}#icon-${this._downIcon}"></use>
 					</svg>
 				  <input
@@ -13978,7 +14024,7 @@ class Control {
             class="control__slider"
             data-control="${this._name}"
           />
-          <svg aria-label="${this._label} up" class="icon icon__control-up-down">
+          <svg data-btn="up" aria-label="${this._label} up" class="icon icon__control-up-down">
             <use href="${_iconsSvgDefault.default}#icon-${this._upIcon}"></use>
 					</svg>
         </div>

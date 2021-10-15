@@ -24,7 +24,7 @@ export default class State {
   constructor(numOfBeats, pulseBeats, BPM) {
     this.numOfBeats = numOfBeats;
     this.pulseBeats = pulseBeats;
-    this.BPM = this.setBPM(BPM);
+    this._BPM = BPM;
 
     /**
      * @property {Array} - an array of booleans with length equal to the number of beats, initialised to false.
@@ -46,12 +46,20 @@ export default class State {
   }
 
   /**
-   * Function to convert the tempo in beats per minute and return the length of time 1 subdivision beat takes at that tempo.
+   * Setter function to set the tempo in beats per minute.
    * @param {Number} BPM - the tempo of the sequence measured in beats per minute.
-   * @returns {Number} the time in milliseconds for 1 subdivision beat at the current tempo.
+   * @returns {Number} the current tempo in beats per minute.
    */
-  setBPM(BPM) {
-    return (this.BPM = parseInt(((60 / BPM) * 1000) / this.pulseBeats));
+  set BPM(BPM) {
+    return (this._BPM = BPM);
+  }
+
+  /**
+   * Getter function which returns the BPM value.
+   * @returns {Number} the tempo expressed as BPM.
+   */
+  get BPM() {
+    return this._BPM;
   }
 
   /**
