@@ -39,15 +39,19 @@ export default class Control {
    * @param {Number} min - the minimum value of the control.
    * @param {Number} max - the maximum value of the control.
    * @param {String} label - the label to be displayed.
-   * @param {String} icon - the name of the icon.
+   * @param {String} icon - the name of the icon which describes the control.
+   * @param {String} downIcon - the name of the icon which decreases the value.
+   * @param {String} upIcon - the name of the icon which increases the value.
    * @returns {Void}
    */
-  constructor(name, min, max, label, icon) {
+  constructor(name, min, max, label, icon, downIcon, upIcon) {
     this._name = name;
     this._min = min;
     this._max = max;
     this._label = label;
     this._icon = icon;
+    this._downIcon = downIcon;
+    this._upIcon = upIcon;
   }
 
   /**
@@ -59,6 +63,7 @@ export default class Control {
     const input = this._parentElement.querySelector(`#${this._name}Input`);
     const slider = this._parentElement.querySelector(`#${this._name}Slider`);
 
+    // set the input and slider values to the value of the argument passed to the function.
     input.value = slider.value = value;
   }
 
@@ -83,16 +88,28 @@ export default class Control {
 					class="control__input"
 					data-control="${this._name}"
 				/>
-				&lt;input
-					aria-label="${this._label} range slider"
-					type="range"
-					min="${this._min}"
-					max="${this._max}"
-					step="1"
-					id="${this._name}Slider"
-					class="control__slider"
-					data-control="${this._name}"
-				/>
+        &lt;div class="control__range-wrapper">
+          &lt;svg data-btn="down" aria-label="${
+            this._label
+          } down" class="icon icon__control-up-down">
+						&lt;use href="${icons}#icon-${this._downIcon}">&lt;/use>
+					&lt;/svg>
+				  &lt;input
+            aria-label="${this._label} range slider"
+            type="range"
+            min="${this._min}"
+            max="${this._max}"
+            step="1"
+            id="${this._name}Slider"
+            class="control__slider"
+            data-control="${this._name}"
+          />
+          &lt;svg data-btn="up" aria-label="${
+            this._label
+          } up" class="icon icon__control-up-down">
+            &lt;use href="${icons}#icon-${this._upIcon}">&lt;/use>
+					&lt;/svg>
+        &lt;/div>
 			&lt;/div>
 		`;
   }
@@ -107,13 +124,13 @@ export default class Control {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlBtnClick">controlControlBtnClick</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Oct 12 2021 23:11:50 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Oct 15 2021 21:34:37 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

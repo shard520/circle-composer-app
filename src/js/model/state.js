@@ -46,12 +46,16 @@ export default class State {
   }
 
   /**
-   * Setter function to set the tempo in beats per minute.
+   * Setter function to set the tempo in beats per minute with a min/max restriction of 40/240.
    * @param {Number} BPM - the tempo of the sequence measured in beats per minute.
    * @returns {Number} the current tempo in beats per minute.
    */
   set BPM(BPM) {
-    return (this._BPM = BPM);
+    if (BPM < 40) this._BPM = 40;
+    else if (BPM > 240) this._BPM = 240;
+    else this._BPM = BPM;
+
+    return this._BPM;
   }
 
   /**

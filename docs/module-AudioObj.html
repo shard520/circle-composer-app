@@ -810,7 +810,136 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line87">line 87</a>
+        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="gain"><span class="type-signature"></span>gain<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Setter to set the gain (volume) on the audio object. This value is stored on the AudioParam node
+as a 32-bit number so Math.fround is used to preserve precision when converting from 64-bit to 32-bit,
+however the value set will not always be equal to the argument passed.
+See <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation">https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation</a></p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="gain"><span class="type-signature"></span>gain<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Getter which returns the current gain value. This value is returned as a rounded integer due to the imprecision
+of the 32-bit value stored by the Web Audio API.
+See <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation">https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation</a></p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -1096,7 +1225,7 @@ A gain node is created and stored in the object with an initial gain value impor
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line82">line 82</a>
+        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -1145,153 +1274,6 @@ A gain node is created and stored in the object with an initial gain value impor
 
 
         
-            
-
-    
-
-    
-    <h4 class="name" id="setGain"><span class="type-signature"></span>setGain<span class="signature">(value)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Set the gain (volume) on the audio object</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>a percentage value of gain</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="model_audioObj.js.html">model/audioObj.js</a>, <a href="model_audioObj.js.html#line73">line 73</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Number - gain percentage as a number between 0-1</p>
-</div>
-
-
-
-    
-
-
-
-
-
-        
     
 
     
@@ -1307,13 +1289,13 @@ A gain node is created and stored in the object with an initial gain value impor
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlBtnClick">controlControlBtnClick</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Oct 12 2021 23:11:50 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Oct 15 2021 21:34:37 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

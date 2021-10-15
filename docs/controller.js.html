@@ -170,7 +170,7 @@ const controlSequence = function (time) {
  * @returns {Void}
  */
 const controlSetNextNote = function () {
-  const secondsPerBeat = (state.BPM * state.pulseBeats) / 1000;
+  const secondsPerBeat = 60 / state.BPM;
 
   // Set the next note time according to the current time signature and beat subdivision
   state.setNextNoteTime(
@@ -232,17 +232,35 @@ const controlStopSequence = function () {
  */
 const controlCreateControls = function () {
   const controls = [];
-  const pulseGain = new Control('pulseGain', 0, 100, 'Pulse Volume', 'pulse');
+  const tempo = new Control(
+    'tempo',
+    40,
+    240,
+    'Tempo',
+    'metronome',
+    'minus-circle',
+    'add-circle'
+  );
+  const pulseGain = new Control(
+    'pulseGain',
+    0,
+    100,
+    'Pulse volume',
+    'pulse',
+    'speaker-quieter',
+    'speaker-louder'
+  );
   const rhythmGain = new Control(
     'rhythmGain',
     0,
     100,
-    'Rhythm Volume',
-    'drumsticks'
+    'Rhythm volume',
+    'drumsticks',
+    'speaker-quieter',
+    'speaker-louder'
   );
-  const tempo = new Control('tempo', 40, 240, 'Tempo', 'metronome');
 
-  controls.push(pulseGain, rhythmGain, tempo);
+  controls.push(tempo, pulseGain, rhythmGain);
 
   controlsBoxView.render(controls);
 };
@@ -261,17 +279,66 @@ const controlControlValueChange = function (e) {
 
   switch (ctrl.dataset.control) {
     case 'tempo':
-      state.setBPM(value);
+      state.BPM = value;
       break;
     case 'rhythmGain':
-      state.rhythmAudio.setGain(value);
+      state.rhythmAudio.gain = value;
       break;
     case 'pulseGain':
-      state.pulseAudioHigh.setGain(value);
-      state.pulseAudioLow.setGain(value);
+      state.pulseAudioHigh.gain = value;
+      state.pulseAudioLow.gain = value;
       break;
   }
 
+  controlsBoxView.updateValue(controlName, value);
+};
+
+/**
+ * Handler function which increments or decrements the value of the control
+ * depending on which button was clicked, then updates the control display.
+ * @param {Object} e - the event which called the handler
+ * @returns {Void}
+ */
+const controlControlBtnClick = function (e) {
+  const ctrl = e.target;
+  const btn = ctrl.dataset.btn;
+
+  if (!btn) return;
+
+  const controlName = ctrl.closest('.control').id;
+
+  /**
+   * Helper function which gets the current value of the control clicked
+   * @param {String} controlName - the name of the control clicked
+   * @returns {Number} the current value of the selected control
+   */
+  const getCurrentValue = controlName => {
+    let currentValue = 0;
+
+    if (controlName === 'tempo') currentValue = state.BPM;
+    if (controlName === 'rhythmGain') currentValue = state.rhythmAudio.gain;
+    if (controlName === 'pulseGain') currentValue = state.pulseAudioHigh.gain;
+
+    return currentValue;
+  };
+
+  // Get existing value from the selected control
+  let value = getCurrentValue(controlName);
+  // Increment/decrement the value according to the button pressed
+  value = btn === 'up' ? ++value : --value;
+
+  // Set the new value back on the selected control
+  if (controlName === 'tempo') state.BPM = value;
+  if (controlName === 'rhythmGain') state.rhythmAudio.gain = value;
+  if (controlName === 'pulseGain') {
+    state.pulseAudioHigh.gain = state.pulseAudioLow.gain = value;
+  }
+
+  // Update the local value variable - this prevents the displayed value
+  // exceeding the min/max enforced by the property setter.
+  value = getCurrentValue(controlName);
+
+  // Update the display with the new value
   controlsBoxView.updateValue(controlName, value);
 };
 
@@ -301,6 +368,8 @@ const init = function () {
   playStopView.addHandlerCreateCtx(controlCreateCtx);
   controlCreateControls();
   controlsBoxView.addHandlerValueChange(controlControlValueChange);
+  controlsBoxView.addHandlerUpDownBtns(controlControlBtnClick);
+  console.log(state);
 };
 
 init();
@@ -314,13 +383,13 @@ init();
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlBtnClick">controlControlBtnClick</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Oct 12 2021 23:11:50 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Oct 15 2021 21:34:37 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

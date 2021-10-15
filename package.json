@@ -5,7 +5,7 @@
   "default": "index.html",
   "scripts": {
     "start": "parcel serve ./src/index.html",
-    "build": "parcel build ./src/index.html && npm run docs",
+    "build": "npm run clean && parcel build ./src/index.html && npm run docs",
     "clean": "rm -rf dist/*",
     "docs": "jsdoc -c jsdoc.json"
   },

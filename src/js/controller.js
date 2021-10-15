@@ -279,22 +279,33 @@ const controlControlBtnClick = function (e) {
 
   const controlName = ctrl.closest('.control').id;
 
-  let value = 0;
+  const getCurrentValue = controlName => {
+    let currentValue = 0;
 
-  if (controlName === 'tempo') value = state.BPM;
-  if (controlName === 'rhythmGain') value = state.rhythmAudio.gain;
-  if (controlName === 'pulseGain') {
-    value = state.pulseAudioHigh.gain;
-  }
+    if (controlName === 'tempo') currentValue = state.BPM;
+    if (controlName === 'rhythmGain') currentValue = state.rhythmAudio.gain;
+    if (controlName === 'pulseGain') currentValue = state.pulseAudioHigh.gain;
 
+    return currentValue;
+  };
+
+  // Get existing value from the selected control
+  let value = getCurrentValue(controlName);
+  // Increment/decrement the value according to the button pressed
   value = btn === 'up' ? ++value : --value;
 
+  // Set the new value back on the selected control
   if (controlName === 'tempo') state.BPM = value;
   if (controlName === 'rhythmGain') state.rhythmAudio.gain = value;
   if (controlName === 'pulseGain') {
     state.pulseAudioHigh.gain = state.pulseAudioLow.gain = value;
   }
 
+  // Update the local value variable - this prevents the displayed value
+  // exceeding the min/max enforced by the property setter.
+  value = getCurrentValue(controlName);
+
+  // Update the display with the new value
   controlsBoxView.updateValue(controlName, value);
 };
 

@@ -652,14 +652,21 @@ const { state  } = _model;
     const btn = ctrl.dataset.btn;
     if (!btn) return;
     const controlName = ctrl.closest('.control').id;
-    let value = 0;
-    if (controlName === 'tempo') value = state.BPM;
-    if (controlName === 'rhythmGain') value = state.rhythmAudio.gain;
-    if (controlName === 'pulseGain') value = state.pulseAudioHigh.gain;
-    value = btn === 'up' ? ++value : --value;
+    const getCurrentValue = (controlName)=>{
+        let currentValue = 0;
+        if (controlName === 'tempo') currentValue = state.BPM;
+        if (controlName === 'rhythmGain') currentValue = state.rhythmAudio.gain;
+        if (controlName === 'pulseGain') currentValue = state.pulseAudioHigh.gain;
+        return currentValue;
+    }; // Get existing value from the selected control
+    let value = getCurrentValue(controlName); // Increment/decrement the value according to the button pressed
+    value = btn === 'up' ? ++value : --value; // Set the new value back on the selected control
     if (controlName === 'tempo') state.BPM = value;
     if (controlName === 'rhythmGain') state.rhythmAudio.gain = value;
     if (controlName === 'pulseGain') state.pulseAudioHigh.gain = state.pulseAudioLow.gain = value;
+     // Update the local value variable - this prevents the displayed value
+    // exceeding the min/max enforced by the property setter.
+    value = getCurrentValue(controlName); // Update the display with the new value
     _controlsBoxViewDefault.default.updateValue(controlName, value);
 };
 /**
@@ -13365,11 +13372,14 @@ class State {
         return window.innerWidth > 800 ? 800 : window.innerWidth * 0.9;
     }
     /**
-   * Setter function to set the tempo in beats per minute.
+   * Setter function to set the tempo in beats per minute with a min/max restriction of 40/240.
    * @param {Number} BPM - the tempo of the sequence measured in beats per minute.
    * @returns {Number} the current tempo in beats per minute.
    */ set BPM(BPM) {
-        return this._BPM = BPM;
+        if (BPM < 40) this._BPM = 40;
+        else if (BPM > 240) this._BPM = 240;
+        else this._BPM = BPM;
+        return this._BPM;
     }
     /**
    * Getter function which returns the BPM value.
@@ -13554,18 +13564,22 @@ class AudioObj {
         }
     }
     /**
-   * Setter to set the gain (volume) on the audio object. This value is stored on the AudioParam node
+   * Setter to set the gain (volume) on the audio object. If the value argument is less than 0 or greater than 100
+   * then the value is set to 0 or 1 respectively. Otherwise the value is stored on the AudioParam node
    * as a 32-bit number so Math.fround is used to preserve precision when converting from 64-bit to 32-bit,
    * however the value set will not always be equal to the argument passed.
    * See {@link https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation}
    * @param {Number} value - a percentage value of gain
    * @returns Number - gain percentage as a number between 0-1
    */ set gain(value) {
-        return this._gainNode.gain.value = Math.fround(value / 100);
+        if (value < 0) this._gainNode.gain.value = 0;
+        else if (value > 100) this._gainNode.gain.value = 1;
+        else this._gainNode.gain.value = Math.fround(value / 100);
+        return this._gainNode.gain.value;
     }
     /**
-   * Getter which returns the current gain value. This value is returned as a rounded integer due to the imprecision
-   * of the 32-bit value stored by the Web Audio API.
+   * Getter which returns the current gain value expressed as a percentage. This value is returned as a
+   * rounded integer due to the imprecision of the 32-bit value stored by the Web Audio API.
    * See {@link https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/value#value_precision_and_variation}
    * @returns {Number} - the current gain value as a percentage
    */ get gain() {

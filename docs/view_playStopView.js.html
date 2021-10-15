@@ -26,7 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>import icons from 'url:../../icons.svg';
+
+/**
  * Module which exports an instance of the PlayStopView class.
  * @module PlayStopView
  */
@@ -73,7 +75,11 @@ class PlayStopView {
       this._parentElement.blur();
       handler();
     });
-    this._parentElement.innerHTML = `&lt;p class="btn__text">Play&lt;/p>`;
+    this._parentElement.innerHTML = `&lt;p class="btn__playStop">
+        &lt;svg class="icon icon__playStop icon__playStop--play">
+					&lt;use href="${icons}#icon-play">&lt;/use>
+				&lt;/svg>
+      &lt;/p>`;
   }
 
   /**
@@ -82,8 +88,14 @@ class PlayStopView {
    * @returns {Void}
    */
   toggleBtnText(isPlaying) {
-    const text = isPlaying ? 'Play' : 'Stop';
-    this._parentElement.innerHTML = `&lt;p class="btn__text">${text}&lt;/p>`;
+    const icon = isPlaying
+      ? `&lt;svg class="icon icon__playStop icon__playStop--play">
+          &lt;use href="${icons}#icon-play">&lt;/use>
+        &lt;/svg>`
+      : `&lt;svg class="icon icon__playStop icon__playStop--stop">
+          &lt;use href="${icons}#icon-stop">&lt;/use>
+        &lt;/svg>`;
+    this._parentElement.innerHTML = `&lt;p class="btn__playStop">${icon}&lt;/p>`;
   }
 
   /**
@@ -107,13 +119,13 @@ export default new PlayStopView();
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView.html">CirclesView</a></li><li><a href="module-config.html">config</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox.html">ControlsBox</a></li><li><a href="module-getCoords.html">getCoords</a></li><li><a href="module-model.html">model</a></li><li><a href="module-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Classes</h3><ul><li><a href="module-AudioObj.html">AudioObj</a></li><li><a href="module-CirclesView-CirclesView.html">CirclesView</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-ControlsBox-ControlsBox.html">ControlsBox</a></li><li><a href="module-PlayStopView-PlayStopView.html">PlayStopView</a></li><li><a href="module-ShiftView-ShiftView.html">ShiftView</a></li><li><a href="module-State.html">State</a></li></ul><h3>Global</h3><ul><li><a href="global.html#controlActiveCells">controlActiveCells</a></li><li><a href="global.html#controlCircleDisplay">controlCircleDisplay</a></li><li><a href="global.html#controlControlBtnClick">controlControlBtnClick</a></li><li><a href="global.html#controlControlValueChange">controlControlValueChange</a></li><li><a href="global.html#controlCreateControls">controlCreateControls</a></li><li><a href="global.html#controlCreateCtx">controlCreateCtx</a></li><li><a href="global.html#controlInitDisplay">controlInitDisplay</a></li><li><a href="global.html#controlScheduleSequence">controlScheduleSequence</a></li><li><a href="global.html#controlSequence">controlSequence</a></li><li><a href="global.html#controlSetNextNote">controlSetNextNote</a></li><li><a href="global.html#controlShiftBackward">controlShiftBackward</a></li><li><a href="global.html#controlShiftForward">controlShiftForward</a></li><li><a href="global.html#controlStartStop">controlStartStop</a></li><li><a href="global.html#controlStopSequence">controlStopSequence</a></li><li><a href="global.html#init">init</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Oct 12 2021 23:11:50 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Oct 15 2021 21:34:37 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
