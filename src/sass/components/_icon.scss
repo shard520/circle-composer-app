@@ -11,6 +11,7 @@
     width: 4rem;
     height: 4rem;
     fill: var(--black-main);
+    transform: rotate(180deg);
   }
 
   &__playStop {
