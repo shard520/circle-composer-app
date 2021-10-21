@@ -7,7 +7,7 @@
     "start": "parcel serve ./src/index.html",
     "build": "npm run clean && parcel build ./src/index.html && npm run docs",
     "clean": "rm -rf dist/*",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc -c jsdoc.json -R ./README.md"
   },
   "repository": {
     "type": "git",
