@@ -7,8 +7,8 @@ View the site [here](https://circle-composer.netlify.app/).
 - [Description](#Description)
 - [Docs](#Docs)
 - [Design](#Design)
+- [Dependencies](#Dependencies)
 - [Features](#Features)
-- [Planned Features](#Planned)
 - [License Details](#License)
 
 ---
@@ -31,6 +31,12 @@ The app has been refactored from the initial version and is inspired by [this tu
 
 ---
 
+## Dependencies
+
+There are no main dependencies. Dev dependencies are just Parcel and JSDoc, along with the necessary packages added by Parcel.
+
+---
+
 ## Features
 
 The core functionality of the app revolves around the way it uses the Web Audio API. Rather than using the default methods like play which are available when using `new Audio(url)`, the [audioObj](https://github.com/shard520/circle-composer-app/blob/main/src/js/model/audioObj.js) is initialised with a url, then a reference to the Audio Context is passed as an argument to `createAudio(ctx)`, this method asynchronously fetches the data, storing it in an array buffer before decoding it, and creating and storing a gain node. The play method can then be called with a time parameter which defaults to the current time. Instead of being promised based, this play method creates a buffer source node each time it is called which is ideal for the nature of the app playing short samples in quick succession, preventing errors related to uncaught promises or when trying to pause and reset the time before playing a single audio object.
@@ -46,13 +52,6 @@ while (state.nextNoteTime < state.ctx.currentTime + SCHEDULER_LOOKAHEAD) {
   controlSetNextNote();
 }
 ```
-
----
-
-## Planned Features
-
-- User selectable time signature - users will be able to select beats in a bar, beat (pulse) value, and beat subdivision.
-- Choice of sounds - pulse and rhythm audio will each have a choice of sounds the user can choose from.
 
 ---
 

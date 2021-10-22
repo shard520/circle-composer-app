@@ -1,6 +1,6 @@
 {
   "name": "circle-composer-app",
-  "version": "0.9.2",
+  "version": "0.1.0",
   "description": "Rhythm sequencer",
   "default": "index.html",
   "scripts": {
@@ -22,7 +22,6 @@
   "browserslist": "defaults",
   "devDependencies": {
     "@parcel/babel-plugin-transform-runtime": "^2.0.0-nightly.1823",
-    "@parcel/babel-preset-env": "^2.0.0-alpha.3",
     "@parcel/transformer-sass": "^2.0.0-rc.0",
     "autoprefixer": "^10.3.1",
     "jsdoc": "^3.6.7",
